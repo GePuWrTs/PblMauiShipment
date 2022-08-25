@@ -17,8 +17,6 @@
                Grid.Column="0"
                Grid.ColumnSpan="2"
                HeightRequest="50"
-               Text="{Binding ZxingBarcodeStr}"
-               TextChanged="barcode_TextChanged"
                Completed="barcode_Completed"/>
         <Label x:Name="scannedCount" 
                Grid.Column="2"
@@ -42,7 +40,7 @@
                     <DataTemplate x:DataType="model:RackScan">
                         <Grid ColumnDefinitions="Auto,*,*"
                               ColumnSpacing="5">
-                            <Label  HeightRequest="20" Grid.Column="0" Text="{Binding Barcode}"></Label>
+                            <Label HeightRequest="20" Grid.Column="0" Text="{Binding Barcode}"></Label>
                             <Label HeightRequest="20" Grid.Column="1" Text="{Binding Scanned}"></Label>
                             <Label HeightRequest="20" Grid.Column="2" Text="{Binding ItemID}"></Label>
                         </Grid>

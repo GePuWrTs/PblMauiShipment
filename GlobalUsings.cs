@@ -8,3 +8,5 @@ global using System.Collections.ObjectModel;
 global using System.ComponentModel;
 global using System.Diagnostics;
 global using System.Runtime.CompilerServices;
+global using ZXing.Net.Maui;
+global using ZXing.QrCode.Internal;

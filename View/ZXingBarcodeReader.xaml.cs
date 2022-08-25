@@ -1,5 +1,3 @@
-using ZXing.Net.Maui;
-
 namespace PblMauiShipment.View;
 
 public partial class ZXingBarcodeReader : ContentPage {
@@ -8,10 +6,9 @@ public partial class ZXingBarcodeReader : ContentPage {
     InitializeComponent();
     //BindingContext = _viewModel = rackSannsViewModel;
     barcodeReader.Options = new BarcodeReaderOptions() {
-      Formats = BarcodeFormats.All,
-      Multiple = false
-      //,
-      //TryHarder = true
+      Formats = BarcodeFormats.All
+      ,Multiple = false
+      //,TryHarder = true
     };
   }
 

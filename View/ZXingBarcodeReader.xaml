@@ -15,7 +15,7 @@
                                        WidthRequest="400"
                                        HeightRequest="400"
                                        IsDetecting="True"
-                                       IsTorchOn="False"                                         
+                                       IsTorchOn="True"                                         
                                        BarcodesDetected="barcodeReader_BarcodesDetected"/>
         <Label x:Name="barcodeResult"
                Text="Mal Testen"/>
