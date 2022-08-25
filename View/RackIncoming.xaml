@@ -17,6 +17,7 @@
                Grid.Column="0"
                Grid.ColumnSpan="2"
                HeightRequest="50"
+               Text="{Binding ZxingBarcodeStr}"
                TextChanged="barcode_TextChanged"
                Completed="barcode_Completed"/>
         <Label x:Name="scannedCount" 
@@ -24,7 +25,6 @@
                HeightRequest="30"
                WidthRequest="150"
                VerticalOptions="Center"
-               Text="{Binding ZxingBarcodeStr}"
                BackgroundColor="CadetBlue"/>
         <ScrollView HorizontalOptions="CenterAndExpand"
                     VerticalOptions="StartAndExpand"
