@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="PblMauiShipment.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:PblMauiShipment"
+    xmlns:pages="clr-namespace:PblMauiShipment.View"
+    Shell.FlyoutBehavior="Flyout">
+
+    <FlyoutItem Title="Versand">
+        <ShellContent Title="Gestell Eingang"
+                      ContentTemplate="{DataTemplate pages:RackIncoming}"
+                      Route="RackIncoming"/>
+        <ShellContent Title="Gestell Ausgang"
+                      ContentTemplate="{DataTemplate pages:RackOutgoing}"
+                      Route="RackOutgoing"/>
+        <ShellContent Title="Gestell Registrieren"
+                      ContentTemplate="{DataTemplate pages:RackRegister}"
+                      Route="RackRegister"/>
+    </FlyoutItem>
+
+    <FlyoutItem Title="Test ZXingBarcodeReader">
+        <ShellContent
+        Title="BarcodeReader"
+        ContentTemplate="{DataTemplate pages:ZXingBarcodeReader}"
+        Route="ZXingBarcodeReader" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Home">
+        <ShellContent
+        Title="Home"
+        ContentTemplate="{DataTemplate local:MainPage}"
+        Route="MainPage" />
+    </FlyoutItem>
+
+</Shell>

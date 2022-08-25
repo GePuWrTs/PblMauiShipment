@@ -1,0 +1,10 @@
+﻿global using CommunityToolkit.Mvvm.ComponentModel;
+global using CommunityToolkit.Mvvm.Input;
+global using PblMauiShipment.Models;
+global using PblMauiShipment.View;
+global using PblMauiShipment.ViewModels;
+global using PblMauiShipment.Services;
+global using System.Collections.ObjectModel;
+global using System.ComponentModel;
+global using System.Diagnostics;
+global using System.Runtime.CompilerServices;

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:zxing="clr-namespace:ZXing.Net.Maui.Controls;assembly=ZXing.Net.MAUI"
+             xmlns:local="clr-namespace:PblMauiShipment"
+             xmlns:model="clr-namespace:PblMauiShipment.Models"
+             xmlns:viewmodel="clr-namespace:PblMauiShipment.ViewModels"
+              x:Class="PblMauiShipment.View.ZXingBarcodeReader"
+             x:DataType="viewmodel:RackSannsViewModel"
+             Title="ZXingBarcodeReader">
+    <VerticalStackLayout Spacing="30"
+                         Padding="30,0"
+                         VerticalOptions="Center">
+        <zxing:CameraBarcodeReaderView x:Name="barcodeReader"
+                                       WidthRequest="400"
+                                       HeightRequest="400"
+                                       IsDetecting="True"
+                                       IsTorchOn="False"                                         
+                                       BarcodesDetected="barcodeReader_BarcodesDetected"/>
+        <Label x:Name="barcodeResult"
+               Text="Mal Testen"/>
+
+
+    </VerticalStackLayout>
+</ContentPage>

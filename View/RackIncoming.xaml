@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PblMauiShipment.View.RackIncoming"
+             xmlns:local="clr-namespace:PblMauiShipment"
+             xmlns:model="clr-namespace:PblMauiShipment.Models"
+             xmlns:viewmodel="clr-namespace:PblMauiShipment.ViewModels"
+             xmlns:zxing="clr-namespace:ZXing.Net.Maui.Controls;assembly=ZXing.Net.MAUI"
+             x:DataType="viewmodel:RackSannsViewModel">
+    <Grid ColumnDefinitions="*,*,Auto"
+          ColumnSpacing="0"
+          RowDefinitions="Auto,*,*,Auto"
+          RowSpacing="0">
+        <Entry x:Name="barcode"
+               Placeholder="Barcode"
+               Grid.Row="0"
+               Grid.Column="0"
+               Grid.ColumnSpan="2"
+               HeightRequest="50"
+               TextChanged="barcode_TextChanged"
+               Completed="barcode_Completed"/>
+        <Label x:Name="scannedCount" 
+               Grid.Column="2"
+               HeightRequest="30"
+               WidthRequest="150"
+               VerticalOptions="Center"
+               Text="{Binding ZxingBarcodeStr}"
+               BackgroundColor="CadetBlue"/>
+        <ScrollView HorizontalOptions="CenterAndExpand"
+                    VerticalOptions="StartAndExpand"
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Grid.RowSpan="2">
+            <CollectionView ItemsSource="{Binding RackScanns}"
+                            SelectionMode="None"
+                            VerticalOptions="StartAndExpand">
+                <CollectionView.EmptyView>
+                        <Label Text="Keine Scann's vorhanden!"></Label>
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="model:RackScan">
+                        <Grid ColumnDefinitions="Auto,*,*"
+                              ColumnSpacing="5">
+                            <Label  HeightRequest="20" Grid.Column="0" Text="{Binding Barcode}"></Label>
+                            <Label HeightRequest="20" Grid.Column="1" Text="{Binding Scanned}"></Label>
+                            <Label HeightRequest="20" Grid.Column="2" Text="{Binding ItemID}"></Label>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </ScrollView>
+        <Button Text="Scann"
+                Command="{Binding ScanBarcodeCommand}"
+                Grid.Row="1"
+                Grid.Column="2"/>
+        <Button Text="Send"
+                Command="{Binding GetMockRackScannsCommand}"
+                Grid.Row="2"
+                Grid.Column="2"/>
+        <Button Text="Get Test Data"
+                Command="{Binding GetMockRackScannsCommand}"
+                Grid.Row="3"/>
+        <Button Text="Clear Data"
+                Command="{Binding ClearRackScannsCommand}"
+                Grid.Row="3"
+                Grid.Column="1"/>
+    </Grid>
+</ContentPage>
