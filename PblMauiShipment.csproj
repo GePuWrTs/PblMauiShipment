@@ -46,10 +46,12 @@
 
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
-	</ItemGroup>
+
+  </ItemGroup>
 
 	<ItemGroup>
 	  <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
+	  <PackageReference Include="Xam.Plugin.SimpleAudioPlayer" Version="1.6.0" />
 	  <PackageReference Include="ZXing.Net.Maui" Version="0.1.0-preview.5" />
 	</ItemGroup>
 
@@ -63,7 +65,7 @@
 
 	<ItemGroup>
 	  <EmbeddedResource Update="Properties\Resources.resx">
-	    <Generator>ResXFileCodeGenerator</Generator>
+	    <Generator>PublicResXFileCodeGenerator</Generator>
 	    <LastGenOutput>Resources.Designer.cs</LastGenOutput>
 	  </EmbeddedResource>
 	</ItemGroup>
@@ -81,6 +83,11 @@
 	  <MauiXaml Update="View\ZXingBarcodeReader.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiAsset Include="Resources\Audio\beep.mp3" />
+	  <MauiAsset Include="Resources\Audio\error.mp3" />
 	</ItemGroup>
 
 </Project>

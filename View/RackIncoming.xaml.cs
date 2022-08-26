@@ -1,3 +1,5 @@
+using System.Reflection;
+
 namespace PblMauiShipment.View;
 
 public partial class RackIncoming : ContentPage {
@@ -15,5 +17,6 @@ public partial class RackIncoming : ContentPage {
       barcode.Text = string.Empty;
     }
   }
+
 
 }

@@ -1,4 +1,6 @@
-﻿namespace PblMauiShipment.ViewModels {
+﻿using System.Reflection;
+
+namespace PblMauiShipment.ViewModels {
 
   [QueryProperty(nameof(ZxingBarcodeStr), nameof(ZxingBarcodeStr))]
 
@@ -35,10 +37,11 @@
     [RelayCommand]
     async Task<bool> AddRackScannAsync(RackScan rackScan) {
       if (rackScan != null) {
+        var rs = RackScanns.FirstOrDefault(b => (b.Barcode == rackScan.Barcode));
         if (rackScan.Barcode != zxingBarcodeStrOld) {
           zxingBarcodeStrOld = rackScan.Barcode;
-          var rs = RackScanns.FirstOrDefault(b => (b.Barcode == rackScan.Barcode));
           if (rs != null) {
+            await PlayErrorAsync();
             await Shell.Current.DisplayAlert("Error!", $"Barcode {rackScan.Barcode} bereits in Liste!", "OK");
           } else {
             if (RackScanns.Count > 0) {
@@ -47,9 +50,9 @@
               rackScan.ItemID = 1;
             rackScan.Scanned = DateTime.Now;
             RackScanns.Add(rackScan);
+            await PlayBeepAsync();
           }
         } 
-
       }
       return await Task.FromResult(true);
     }
@@ -96,5 +99,16 @@
         IsBusy = false;
       }
     }
+
+
+    [RelayCommand]
+    public async Task PlayBeepAsync() {
+      await PlaySound("beep.mp3");
+    }
+    [RelayCommand]
+    public async Task PlayErrorAsync() {
+      await PlaySound("Resources\\Audio\\error.mp3");
+    }
+
   }
 }

@@ -63,5 +63,9 @@
                 Command="{Binding ClearRackScannsCommand}"
                 Grid.Row="3"
                 Grid.Column="1"/>
+        <Button Text="Play Beep"
+                Command="{Binding PlayErrorCommand}"
+                Grid.Row="3"
+                Grid.Column="2"/>
     </Grid>
 </ContentPage>
