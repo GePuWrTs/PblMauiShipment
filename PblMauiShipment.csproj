@@ -90,4 +90,6 @@
 	  <MauiAsset Include="Resources\Audio\error.mp3" />
 	</ItemGroup>
 
+	<ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadDebuggerTimeoutExceptionPblMauiShipmentHideInfoBar="True" /></VisualStudio></ProjectExtensions>
+
 </Project>

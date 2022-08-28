@@ -36,8 +36,5 @@ namespace PblMauiShipment.ViewModels {
         await Shell.Current.DisplayAlert("Error!", ex.ToString(), "OK");
       }
     }
-
-
-
   }
 }

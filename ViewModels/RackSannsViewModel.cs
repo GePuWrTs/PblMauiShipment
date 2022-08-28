@@ -26,7 +26,6 @@ namespace PblMauiShipment.ViewModels {
 
     public RackSannsViewModel(RackScanService rackScanService) {
       Title = Properties.Resources.RackScanns;
-      this.rackScanService = rackScanService;     
     }
 
     [RelayCommand]

@@ -23,7 +23,8 @@
                HeightRequest="30"
                WidthRequest="150"
                VerticalOptions="Center"
-               BackgroundColor="CadetBlue"/>
+               Style="{StaticResource LargeLabel}"
+               />
         <ScrollView HorizontalOptions="CenterAndExpand"
                     VerticalOptions="StartAndExpand"
                     Grid.Row="1"
@@ -51,21 +52,26 @@
         <Button Text="Scann"
                 Command="{Binding ScanBarcodeCommand}"
                 Grid.Row="1"
-                Grid.Column="2"/>
+                Grid.Column="2"
+                Style="{StaticResource ButtonOutline}"/>
         <Button Text="Send"
                 Command="{Binding GetMockRackScannsCommand}"
                 Grid.Row="2"
-                Grid.Column="2"/>
+                Grid.Column="2"
+                Style="{StaticResource ButtonOutline}"/>
         <Button Text="Get Test Data"
                 Command="{Binding GetMockRackScannsCommand}"
-                Grid.Row="3"/>
+                Grid.Row="3"
+                Style="{StaticResource ButtonOutline}"/>
         <Button Text="Clear Data"
                 Command="{Binding ClearRackScannsCommand}"
                 Grid.Row="3"
-                Grid.Column="1"/>
+                Grid.Column="1"
+                Style="{StaticResource ButtonOutline}"/>
         <Button Text="Play Beep"
                 Command="{Binding PlayErrorCommand}"
                 Grid.Row="3"
-                Grid.Column="2"/>
+                Grid.Column="2"
+                Style="{StaticResource ButtonOutline}"/>
     </Grid>
 </ContentPage>
