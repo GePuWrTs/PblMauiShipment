@@ -9,7 +9,7 @@
              x:DataType="viewmodel:RackSannsViewModel">
     <Grid ColumnDefinitions="*,*,Auto"
           ColumnSpacing="0"
-          RowDefinitions="Auto,*,*,Auto"
+          RowDefinitions="Auto,*,*,Auto,Auto"
           RowSpacing="0">
         <Entry x:Name="barcode"
                Placeholder="Barcode"
@@ -72,6 +72,11 @@
                 Command="{Binding PlayErrorCommand}"
                 Grid.Row="3"
                 Grid.Column="2"
+                Style="{StaticResource ButtonOutline}"/>
+        <Button Text="Save RAI"
+                Command="{Binding SaveRAIRackScanListToXmlCommand}"
+                Grid.Row="4"
+                Grid.Column="0"
                 Style="{StaticResource ButtonOutline}"/>
     </Grid>
 </ContentPage>

@@ -1,0 +1,112 @@
+<RAI>
+  <DeviceID>P17E02765</DeviceID>
+  <Created>15.12.2021 10:30:41</Created>
+  <Closed>15.12.2021 12:09:39</Closed>
+  <Items>
+    <Item>
+      <ItemID>1</ItemID>
+      <Barcode>00150</Barcode>
+      <Scanned>15.12.2021 11:52:09</Scanned>
+    </Item>
+    <Item>
+      <ItemID>2</ItemID>
+      <Barcode>00155</Barcode>
+      <Scanned>15.12.2021 11:52:13</Scanned>
+    </Item>
+    <Item>
+      <ItemID>3</ItemID>
+      <Barcode>00990</Barcode>
+      <Scanned>15.12.2021 11:52:15</Scanned>
+    </Item>
+    <Item>
+      <ItemID>4</ItemID>
+      <Barcode>00239</Barcode>
+      <Scanned>15.12.2021 11:52:27</Scanned>
+    </Item>
+    <Item>
+      <ItemID>5</ItemID>
+      <Barcode>00821</Barcode>
+      <Scanned>15.12.2021 11:52:32</Scanned>
+    </Item>
+    <Item>
+      <ItemID>6</ItemID>
+      <Barcode>00814</Barcode>
+      <Scanned>15.12.2021 11:52:34</Scanned>
+    </Item>
+    <Item>
+      <ItemID>7</ItemID>
+      <Barcode>00569</Barcode>
+      <Scanned>15.12.2021 11:52:39</Scanned>
+    </Item>
+    <Item>
+      <ItemID>8</ItemID>
+      <Barcode>00858</Barcode>
+      <Scanned>15.12.2021 11:52:42</Scanned>
+    </Item>
+    <Item>
+      <ItemID>9</ItemID>
+      <Barcode>60193</Barcode>
+      <Scanned>15.12.2021 11:52:46</Scanned>
+    </Item>
+    <Item>
+      <ItemID>10</ItemID>
+      <Barcode>00158</Barcode>
+      <Scanned>15.12.2021 11:52:51</Scanned>
+    </Item>
+    <Item>
+      <ItemID>11</ItemID>
+      <Barcode>00561</Barcode>
+      <Scanned>15.12.2021 11:52:52</Scanned>
+    </Item>
+    <Item>
+      <ItemID>12</ItemID>
+      <Barcode>70198</Barcode>
+      <Scanned>15.12.2021 11:52:54</Scanned>
+    </Item>
+    <Item>
+      <ItemID>13</ItemID>
+      <Barcode>00115</Barcode>
+      <Scanned>15.12.2021 11:52:59</Scanned>
+    </Item>
+    <Item>
+      <ItemID>14</ItemID>
+      <Barcode>00856</Barcode>
+      <Scanned>15.12.2021 11:53:04</Scanned>
+    </Item>
+    <Item>
+      <ItemID>15</ItemID>
+      <Barcode>00267</Barcode>
+      <Scanned>15.12.2021 11:53:11</Scanned>
+    </Item>
+    <Item>
+      <ItemID>16</ItemID>
+      <Barcode>00591</Barcode>
+      <Scanned>15.12.2021 11:53:38</Scanned>
+    </Item>
+    <Item>
+      <ItemID>17</ItemID>
+      <Barcode>00105</Barcode>
+      <Scanned>15.12.2021 11:53:41</Scanned>
+    </Item>
+    <Item>
+      <ItemID>18</ItemID>
+      <Barcode>00570</Barcode>
+      <Scanned>15.12.2021 11:53:42</Scanned>
+    </Item>
+    <Item>
+      <ItemID>19</ItemID>
+      <Barcode>00851</Barcode>
+      <Scanned>15.12.2021 11:53:48</Scanned>
+    </Item>
+    <Item>
+      <ItemID>20</ItemID>
+      <Barcode>60137</Barcode>
+      <Scanned>15.12.2021 11:53:50</Scanned>
+    </Item>
+    <Item>
+      <ItemID>21</ItemID>
+      <Barcode>00837</Barcode>
+      <Scanned>15.12.2021 11:53:52</Scanned>
+    </Item>
+  </Items>
+</RAI>

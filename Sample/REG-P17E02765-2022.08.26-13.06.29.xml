@@ -1,0 +1,42 @@
+<REG>
+  <DeviceID>P17E02765</DeviceID>
+  <Created>26.08.2022 13:06:29</Created>
+  <Closed>26.08.2022 13:07:48</Closed>
+  <Items>
+    <Item>
+      <ItemID>1</ItemID>
+      <Barcode>9999911111</Barcode>
+      <OwnerID>1</OwnerID>
+      <OwnerName>Porta</OwnerName>
+      <Scanned>26.08.2022 13:07:05</Scanned>
+    </Item>
+    <Item>
+      <ItemID>2</ItemID>
+      <Barcode>9999911112</Barcode>
+      <OwnerID>1</OwnerID>
+      <OwnerName>Porta</OwnerName>
+      <Scanned>26.08.2022 13:07:16</Scanned>
+    </Item>
+    <Item>
+      <ItemID>3</ItemID>
+      <Barcode>9999911113</Barcode>
+      <OwnerID>1</OwnerID>
+      <OwnerName>Porta</OwnerName>
+      <Scanned>26.08.2022 13:07:26</Scanned>
+    </Item>
+    <Item>
+      <ItemID>4</ItemID>
+      <Barcode>9999911114</Barcode>
+      <OwnerID>1</OwnerID>
+      <OwnerName>Porta</OwnerName>
+      <Scanned>26.08.2022 13:07:35</Scanned>
+    </Item>
+    <Item>
+      <ItemID>5</ItemID>
+      <Barcode>9999911115</Barcode>
+      <OwnerID>1</OwnerID>
+      <OwnerName>Porta</OwnerName>
+      <Scanned>26.08.2022 13:07:48</Scanned>
+    </Item>
+  </Items>
+</REG>

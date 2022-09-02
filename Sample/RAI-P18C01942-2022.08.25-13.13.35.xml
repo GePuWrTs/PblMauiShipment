@@ -1,0 +1,32 @@
+<RAI>
+  <DeviceID>P18C01942</DeviceID>
+  <Created>25.08.2022 13:13:35</Created>
+  <Closed>25.08.2022 13:43:03</Closed>
+  <Items>
+    <Item>
+      <ItemID>1</ItemID>
+      <Barcode>105114010096</Barcode>
+      <Scanned>25.08.2022 13:13:35</Scanned>
+    </Item>
+    <Item>
+      <ItemID>2</ItemID>
+      <Barcode>105114007645</Barcode>
+      <Scanned>25.08.2022 13:13:40</Scanned>
+    </Item>
+    <Item>
+      <ItemID>3</ItemID>
+      <Barcode>00525</Barcode>
+      <Scanned>25.08.2022 13:26:39</Scanned>
+    </Item>
+    <Item>
+      <ItemID>4</ItemID>
+      <Barcode>00935</Barcode>
+      <Scanned>25.08.2022 13:27:49</Scanned>
+    </Item>
+    <Item>
+      <ItemID>5</ItemID>
+      <Barcode>00136</Barcode>
+      <Scanned>25.08.2022 13:32:43</Scanned>
+    </Item>
+  </Items>
+</RAI>

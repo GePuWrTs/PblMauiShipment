@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using PblMauiShipment.Models;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace PblMauiShipment.ViewModels {
 
@@ -6,7 +8,7 @@ namespace PblMauiShipment.ViewModels {
 
   public partial class RackSannsViewModel : BaseViewModel {
     public ObservableCollection<RackScan> RackScanns { get; set; } = new();
-    RackScanService rackScanService;
+    RackScanService rackScanService = new RackScanService();
     string zxingBarcodeStrOld = string.Empty;
 
 
@@ -107,6 +109,14 @@ namespace PblMauiShipment.ViewModels {
     [RelayCommand]
     public async Task PlayErrorAsync() {
       await PlaySound("Resources\\Audio\\error.mp3");
+    }
+
+    [RelayCommand]
+    public async Task<bool> SaveRAIRackScanListToXml() {
+      if ((RackScanns != null) && (RackScanns.Count > 0)) {
+        return await rackScanService.SaveRackScanListToXml(RackScanns, ScanType.incoming);
+      }
+      return await Task.FromResult(false);
     }
 
   }

@@ -1,33 +1,98 @@
-﻿using System.Xml;
+﻿using System.Globalization;
+using System.Text;
+using System.Xml;
 using PblMauiShipment.ViewModels;
 
 namespace PblMauiShipment.Services {
   public class RackScanService {
-    private string DataDirectory;
+    private string mDataDirectory;
+    private Device mDeviceInfo = new();
+    CultureInfo mProvider = new CultureInfo("de-DE");
 
-   
 
     public RackScanService() {
-      DataDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "data");
-      Directory.CreateDirectory(DataDirectory);
-      ReadDeviceInfo();
+      mDataDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "data");
+      Directory.CreateDirectory(mDataDirectory);
+      mDeviceInfo.ReadDeviceInfo();
     }
 
     List<RackScan> rackScanList = new();
 
-    public async Task SaveRackScanListToXml(List<RackScan> rackScanList, ScanType scanType) {
-      if (rackScanList != null) {
-        XmlDocument racks = new();
+    public async Task<bool> SaveRackScanListToXml(ObservableCollection<RackScan> rackScanList, ScanType scanType) {
+      bool result = false;
+      if ((rackScanList != null) && (rackScanList.Count > 0)) {
+
+        StringBuilder sb = new StringBuilder(Path.Combine(mDataDirectory, BuildRackScanFileName(scanType)));
+        string XRootNodeName = String.Empty;
+
+        FileInfo FileInfoXDoc = new FileInfo(sb.ToString());
+        // FileInfoXDoc.Create();
+
+        switch (scanType) {
+          case ScanType.incoming:
+            XRootNodeName = "RAI";
+            break;
+          case ScanType.outgoing:
+            XRootNodeName = "RAO";
+            break;
+          case ScanType.create:
+            XRootNodeName = "REG";
+            break;
+          default:
+            XRootNodeName = "ERROR";
+            break;
+        }
+
+        XmlDocument XDoc = new XmlDocument();
+        XmlElement XRoot = XDoc.CreateElement(XRootNodeName);
+        XDoc.AppendChild(XRoot);
+        XmlElement deviceID = XDoc.CreateElement("DeviceID");
+        deviceID.InnerText = mDeviceInfo.DeviceName;
+        XRoot.AppendChild(deviceID);
+        XmlElement created = XDoc.CreateElement("Created");
+        created.InnerText = DateTime.Now.ToString(mProvider);
+        XRoot.AppendChild(created);
+        XmlElement closed = XDoc.CreateElement("Closed");
+        closed.InnerText = DateTime.MinValue.ToString(mProvider);
+        XRoot.AppendChild(closed);
+        XmlElement XLines = XDoc.CreateElement("Items"); ;
+
+        int index = 0;
+        foreach (RackScan rack in rackScanList) {
+          index += 1;
+          if (index == 1) {
+            created.InnerText = rack.Scanned.ToString(mProvider);
+          }
+          XmlElement XItem = XDoc.CreateElement("Item");
+          XmlElement ItemId = XDoc.CreateElement("ItemID");
+          ItemId.InnerText = index.ToString();
+          XItem.AppendChild(ItemId);
+          XmlElement Barcode = XDoc.CreateElement("Barcode");
+          Barcode.InnerText = rack.Barcode;
+          XItem.AppendChild(Barcode);
+          XmlElement Scanned = XDoc.CreateElement("Scanned");
+          Scanned.InnerText = rack.Scanned.ToString(mProvider);
+          XItem.AppendChild(Scanned);
+          XLines.AppendChild(XItem);
+        }
+        XRoot.AppendChild(XLines);
+
+        closed.InnerText = DateTime.Now.ToString(mProvider);
+        XDoc.Save(FileInfoXDoc.FullName);
+        if (FileInfoXDoc.Exists)
+          result = true;
       }
-      await Task.CompletedTask;
+      return await Task.FromResult(result);
+
     }
 
-    public string CreateRackScanFileName(ScanType scanType) {
+
+    public string BuildRackScanFileName(ScanType scanType) {
       DateTime creationDate = DateTime.Now;
       string filename = string.Empty;
 
       switch (scanType) {
-        case ScanType.incoming: 
+        case ScanType.incoming:
           filename = "RAI";
           break;
         case ScanType.outgoing:
@@ -40,43 +105,15 @@ namespace PblMauiShipment.Services {
 
       filename = string.Format("{0}-{1}-{2}.{3}.{4}-{5}.xml",
                                 filename,
-                                    DeviceName,
+                                    mDeviceInfo.DeviceName,
                                         creationDate.Year,
                                              creationDate.Month.ToString().PadLeft(2, '0'),
                                                 creationDate.Day.ToString().PadLeft(2, '0'),
                                                      creationDate.ToLongTimeString().Replace(':', '.'));
 
-      return filename; 
+      return filename;
     }
 
-
-    public string DeviceModel { get; set; }
-    public string DeviceManufacturer { get; set; }
-    public string DeviceName { get; set; }
-    public string DeviceOSVersion { get; set; }
-    public IDeviceInfo DeviceIDeviceInfo { get; set; }
-    public DeviceIdiom DeviceDeviceIdiom { get; set; }
-    public DevicePlatform DeviceDevicePlatform { get; set; }
-    public bool DeviceIsVirtual { get; set; }
-
-    public void ReadDeviceInfo() {
-
-      DeviceModel = DeviceInfo.Current.Model;
-      DeviceManufacturer = DeviceInfo.Current.Manufacturer;
-      DeviceName = DeviceInfo.Name;
-      DeviceOSVersion = DeviceInfo.VersionString;
-      DeviceIDeviceInfo = DeviceInfo.Current;
-      DeviceDeviceIdiom = DeviceInfo.Current.Idiom;
-      DeviceDevicePlatform = DeviceInfo.Current.Platform;
-
-
-      DeviceIsVirtual = DeviceInfo.Current.DeviceType switch {
-        DeviceType.Physical => false,
-        DeviceType.Virtual => true,
-        _ => false
-      };
-
-    }
 
     public async Task<List<RackScan>> GetMockRackScanList() {
       rackScanList.Clear();
