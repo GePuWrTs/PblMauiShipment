@@ -1,7 +1,8 @@
 ﻿using System.Globalization;
 using System.Text;
 using System.Xml;
-using PblMauiShipment.ViewModels;
+
+
 
 namespace PblMauiShipment.Services {
   public class RackScanService {

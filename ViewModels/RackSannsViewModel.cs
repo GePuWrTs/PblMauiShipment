@@ -104,7 +104,7 @@ namespace PblMauiShipment.ViewModels {
 
     [RelayCommand]
     public async Task PlayBeepAsync() {
-      await PlaySound("beep.mp3");
+      await PlaySound("Resources\\Audio\\beep.mp3");
     }
     [RelayCommand]
     public async Task PlayErrorAsync() {
