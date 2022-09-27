@@ -1,4 +1,6 @@
 ﻿using System.Globalization;
+using System.Net.Http.Headers;
+using System.Net.Http;
 using System.Text;
 using System.Xml;
 
@@ -9,6 +11,7 @@ namespace PblMauiShipment.Services {
     private string mDataDirectory;
     private Device mDeviceInfo = new();
     CultureInfo mProvider = new CultureInfo("de-DE");
+    HttpClient mHttpClient = new HttpClient();
 
 
     public RackScanService() {
@@ -82,11 +85,57 @@ namespace PblMauiShipment.Services {
         XDoc.Save(FileInfoXDoc.FullName);
         if (FileInfoXDoc.Exists)
           result = true;
+
+        string response = await UploadSampleFile(FileInfoXDoc.FullName);
       }
       return await Task.FromResult(result);
 
     }
 
+    public async Task<string> UploadSampleFile(string fileFullName) {
+      HttpClientHandler clientHandler = new HttpClientHandler();
+      clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+      
+
+      var client = new HttpClient(clientHandler) {
+        BaseAddress = new("http://192.168.5.48:7077")
+        //BaseAddress = new("http://192.168.5.37:7070")
+        //BaseAddress = new("http://localhost:5128")
+      };
+
+      await using var stream = System.IO.File.OpenRead(fileFullName);
+      using var request = new HttpRequestMessage(HttpMethod.Post, "uploadfile");
+      using var content = new MultipartFormDataContent
+      {
+        //{ new StreamContent(stream), "file", "Test.txt" }
+        { new StreamContent(stream), "file", Path.GetFileName(fileFullName) }
+    };
+
+      request.Content = content;
+      var response = await client.SendAsync(request);
+      response.EnsureSuccessStatusCode();
+      return await response.Content.ReadAsStringAsync();
+    }
+
+
+
+    //public async Task<string> UploadFile(string fileFullName) {
+    //  using (var multipartFormContent = new MultipartFormDataContent()) {
+    //    //Add other fields
+    //    multipartFormContent.Add(new StringContent("123"), name: "UserId");
+    //    multipartFormContent.Add(new StringContent("Home insurance"), name: "Title");
+
+    //    //Add the file
+    //    var fileStreamContent = new StreamContent(File.OpenRead(fileFullName));
+    //    fileStreamContent.Headers.ContentType = new MediaTypeHeaderValue("Xml/xml");
+    //    multipartFormContent.Add(fileStreamContent, name: "file", fileName: Path.GetFileName(fileFullName));
+
+    //    //Send it
+    //    var response = await mHttpClient.PostAsync("https://192.168.114.1:7077", multipartFormContent);
+    //    response.EnsureSuccessStatusCode();
+    //    return await response.Content.ReadAsStringAsync();
+    //  }
+    //}
 
     public string BuildRackScanFileName(ScanType scanType) {
       DateTime creationDate = DateTime.Now;
@@ -144,3 +193,4 @@ namespace PblMauiShipment.Services {
 
   }
 }
+

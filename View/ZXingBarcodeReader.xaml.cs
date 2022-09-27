@@ -8,8 +8,10 @@ public partial class ZXingBarcodeReader : ContentPage {
     barcodeReader.Options = new BarcodeReaderOptions() {
       Formats = BarcodeFormats.All
       ,Multiple = false
+      ,AutoRotate = true
       //,TryHarder = true
     };
+    barcodeReader.IsTorchOn = true;
   }
 
   private void barcodeReader_BarcodesDetected(object sender, BarcodeDetectionEventArgs e) {     
