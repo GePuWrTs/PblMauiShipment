@@ -6,9 +6,6 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PblMauiShipment", "PblMauiShipment.csproj", "{B8E9CCBE-E44B-42BE-87A3-06D98213C745}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Projektmappenelemente", "Projektmappenelemente", "{0FE0BF4C-0118-4BC0-A681-F0D372E983C4}"
-	ProjectSection(SolutionItems) = preProject
-		ActualVersion.txt = ActualVersion.txt
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

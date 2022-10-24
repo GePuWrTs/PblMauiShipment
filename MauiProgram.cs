@@ -1,4 +1,6 @@
-﻿using ZXing.Net.Maui;
+﻿using Microsoft.Extensions.Configuration;
+using System.Reflection;
+using ZXing.Net.Maui;
 
 namespace PblMauiShipment;
 
