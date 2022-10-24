@@ -1,6 +1,8 @@
-﻿
-using PblMauiShipment.Models;
-using System.Reflection;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace PblMauiShipment.ViewModels {
   public partial class BaseViewModel : ObservableObject {
@@ -13,6 +15,15 @@ namespace PblMauiShipment.ViewModels {
 
     public bool IsNotBusy => !IsBusy;
 
+
+    [RelayCommand]
+    public async Task PlayBeepAsync() {
+      await PlaySound(@"Resources\Audio\beep.mp3");
+    }
+    [RelayCommand]
+    public async Task PlayErrorAsync() {
+      await PlaySound(@"Resources\Audio\error.mp3");
+    }
 
     public async Task PlaySound(string fileName) {
       try {
@@ -36,5 +47,6 @@ namespace PblMauiShipment.ViewModels {
         await Shell.Current.DisplayAlert("Error!", ex.ToString(), "OK");
       }
     }
+
   }
 }

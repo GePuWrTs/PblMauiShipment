@@ -3,20 +3,21 @@ using System.Reflection;
 namespace PblMauiShipment.View;
 
 public partial class RackIncoming : ContentPage {
-  RackSannsViewModel _viewModel;
+  RackScanIncomingViewModel _viewIncomingModel;
 
-  public RackIncoming(RackSannsViewModel rackSannsViewModel) {
+  public RackIncoming(RackScanIncomingViewModel rackSannsIncomingViewModel) {
     InitializeComponent();
-    Title = Properties.Resources.RackScanns;
-    BindingContext = _viewModel = rackSannsViewModel;
+    Title = Properties.Resources.RackIncomming;
+    BindingContext = _viewIncomingModel = rackSannsIncomingViewModel;
+    scannedCount.Text = _viewIncomingModel.RackScannsCount.ToString();
   }
 
   private void barcode_Completed(object sender, EventArgs e) {
-    if (barcode.Text != string.Empty) {
-      _viewModel.ZxingBarcodeStr = barcode.Text;
-      barcode.Text = string.Empty;
+    if (barcode_incomming.Text != string.Empty) {
+      _viewIncomingModel.ZxingBarcodeStrIncomming = barcode_incomming.Text;
+      barcode_incomming.Text = string.Empty;
+      scannedCount.Text = _viewIncomingModel.RackScannsCount.ToString();
     }
   }
-
 
 }

@@ -6,7 +6,7 @@
              xmlns:model="clr-namespace:PblMauiShipment.Models"
              xmlns:viewmodel="clr-namespace:PblMauiShipment.ViewModels"
               x:Class="PblMauiShipment.View.ZXingBarcodeReader"
-             x:DataType="viewmodel:RackSannsViewModel"
+             x:DataType="viewmodel:RackScanBaseViewModel"
              Title="ZXingBarcodeReader">
     <VerticalStackLayout Spacing="30"
                          Padding="30,0"

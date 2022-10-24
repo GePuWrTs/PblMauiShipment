@@ -6,12 +6,12 @@
              xmlns:model="clr-namespace:PblMauiShipment.Models"
              xmlns:viewmodel="clr-namespace:PblMauiShipment.ViewModels"
              xmlns:zxing="clr-namespace:ZXing.Net.Maui.Controls;assembly=ZXing.Net.MAUI"
-             x:DataType="viewmodel:RackSannsViewModel">
+             x:DataType="viewmodel:RackScanIncomingViewModel">
     <Grid ColumnDefinitions="*,*,Auto"
           ColumnSpacing="0"
           RowDefinitions="Auto,*,*,Auto,Auto"
           RowSpacing="0">
-        <Entry x:Name="barcode"
+        <Entry x:Name="barcode_incomming"
                Placeholder="Barcode"
                Grid.Row="0"
                Grid.Column="0"
@@ -19,6 +19,7 @@
                HeightRequest="50"
                Completed="barcode_Completed"/>
         <Label x:Name="scannedCount" 
+               Text="{Binding RackScannsCount}"
                Grid.Column="2"
                HeightRequest="30"
                WidthRequest="150"
@@ -50,12 +51,12 @@
             </CollectionView>
         </ScrollView>
         <Button Text="Scann"
-                Command="{Binding ScanBarcodeCommand}"
+                Command="{Binding ScanBarcodeIncommingCommand}"
                 Grid.Row="1"
                 Grid.Column="2"
                 Style="{StaticResource ButtonOutline}"/>
         <Button Text="Send"
-                Command="{Binding GetMockRackScannsCommand}"
+                Command="{Binding SendFileCommand}"
                 Grid.Row="2"
                 Grid.Column="2"
                 Style="{StaticResource ButtonOutline}"/>

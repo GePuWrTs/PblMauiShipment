@@ -1,4 +1,7 @@
+//using static Java.Util.Jar.Attributes;
+
 namespace PblMauiShipment.View;
+[QueryProperty(nameof(ScanType), "scantype")]
 
 public partial class ZXingBarcodeReader : ContentPage {
   string retunedBarcode = string.Empty;
@@ -14,11 +17,30 @@ public partial class ZXingBarcodeReader : ContentPage {
     barcodeReader.IsTorchOn = true;
   }
 
-  private void barcodeReader_BarcodesDetected(object sender, BarcodeDetectionEventArgs e) {     
-    Dispatcher.Dispatch(async () => {
-      retunedBarcode = $"{e.Results[0].Value} - {e.Results[0].Format}";
-      barcodeResult.Text = retunedBarcode;
-      await Shell.Current.GoToAsync($"..?ZxingBarcodeStr={retunedBarcode}");
-    });
+  string mScantype = string.Empty;
+  public string ScanType {
+    set {
+      mScantype = value;
+    }
+  }
+
+  private void barcodeReader_BarcodesDetected(object sender, BarcodeDetectionEventArgs e) {
+    switch (mScantype) {
+      case "incoming":
+        Dispatcher.Dispatch(async () => {
+          retunedBarcode = $"{e.Results[0].Value} - {e.Results[0].Format}";
+          barcodeResult.Text = retunedBarcode;
+          await Shell.Current.GoToAsync($"..?ZxingBarcodeStrIncomming={retunedBarcode}");
+        });
+        break;
+      default:
+        Dispatcher.Dispatch(async () => {
+          retunedBarcode = $"{e.Results[0].Value} - {e.Results[0].Format}";
+          barcodeResult.Text = retunedBarcode;
+          await Shell.Current.GoToAsync($"..?ZxingBarcodeStrIncomming={retunedBarcode}");
+        });
+        break;
+    }
+
   }
 }

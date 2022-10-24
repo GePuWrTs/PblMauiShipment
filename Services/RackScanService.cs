@@ -3,30 +3,54 @@ using System.Net.Http.Headers;
 using System.Net.Http;
 using System.Text;
 using System.Xml;
-
-
+using System.Text.Json;
+using PblMauiShipment.Models;
+//using static Android.Graphics.ImageDecoder;
 
 namespace PblMauiShipment.Services {
   public class RackScanService {
     private string mDataDirectory;
+    private string mRackFileDirectory;
     private Device mDeviceInfo = new();
     CultureInfo mProvider = new CultureInfo("de-DE");
-    HttpClient mHttpClient = new HttpClient();
+    private const string mRackIncomingPrefix = "RAI";
+    private const string mRackOutgoingPrefix = "RAO";
+    private const string mRackRegisterPrefix = "REG";
 
+    #region Properies
+    public string DataDirectory {
+      get { return mDataDirectory; }
+    }
+
+    public string RackFileDirectory {
+      get { return mRackFileDirectory; }
+    }
+
+    public string RackIncomingPrefix {
+      get { return mRackIncomingPrefix; }
+    }
+    public string RackOutgoingPrefix {
+      get { return mRackOutgoingPrefix; }
+    }
+    public string RackRegisterPrefix {
+      get { return mRackRegisterPrefix; }
+    }
+    #endregion
 
     public RackScanService() {
       mDataDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "data");
       Directory.CreateDirectory(mDataDirectory);
+      mRackFileDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "rackFiles");
+      Directory.CreateDirectory(mRackFileDirectory);
       mDeviceInfo.ReadDeviceInfo();
     }
 
-    List<RackScan> rackScanList = new();
 
     public async Task<bool> SaveRackScanListToXml(ObservableCollection<RackScan> rackScanList, ScanType scanType) {
       bool result = false;
       if ((rackScanList != null) && (rackScanList.Count > 0)) {
 
-        StringBuilder sb = new StringBuilder(Path.Combine(mDataDirectory, BuildRackScanFileName(scanType)));
+        StringBuilder sb = new StringBuilder(Path.Combine(mRackFileDirectory, BuildRackScanFileName(scanType)));
         string XRootNodeName = String.Empty;
 
         FileInfo FileInfoXDoc = new FileInfo(sb.ToString());
@@ -34,13 +58,13 @@ namespace PblMauiShipment.Services {
 
         switch (scanType) {
           case ScanType.incoming:
-            XRootNodeName = "RAI";
+            XRootNodeName = mRackIncomingPrefix;
             break;
           case ScanType.outgoing:
-            XRootNodeName = "RAO";
+            XRootNodeName = mRackOutgoingPrefix;
             break;
-          case ScanType.create:
-            XRootNodeName = "REG";
+          case ScanType.register:
+            XRootNodeName = mRackRegisterPrefix;
             break;
           default:
             XRootNodeName = "ERROR";
@@ -83,59 +107,13 @@ namespace PblMauiShipment.Services {
 
         closed.InnerText = DateTime.Now.ToString(mProvider);
         XDoc.Save(FileInfoXDoc.FullName);
-        if (FileInfoXDoc.Exists)
-          result = true;
+        result = FileInfoXDoc.Exists;
 
-        string response = await UploadSampleFile(FileInfoXDoc.FullName);
+        // string response = await UploadFile(FileInfoXDoc.FullName);
       }
       return await Task.FromResult(result);
 
     }
-
-    public async Task<string> UploadSampleFile(string fileFullName) {
-      HttpClientHandler clientHandler = new HttpClientHandler();
-      clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
-      
-
-      var client = new HttpClient(clientHandler) {
-        BaseAddress = new("http://192.168.5.48:7077")
-        //BaseAddress = new("http://192.168.5.37:7070")
-        //BaseAddress = new("http://localhost:5128")
-      };
-
-      await using var stream = System.IO.File.OpenRead(fileFullName);
-      using var request = new HttpRequestMessage(HttpMethod.Post, "uploadfile");
-      using var content = new MultipartFormDataContent
-      {
-        //{ new StreamContent(stream), "file", "Test.txt" }
-        { new StreamContent(stream), "file", Path.GetFileName(fileFullName) }
-    };
-
-      request.Content = content;
-      var response = await client.SendAsync(request);
-      response.EnsureSuccessStatusCode();
-      return await response.Content.ReadAsStringAsync();
-    }
-
-
-
-    //public async Task<string> UploadFile(string fileFullName) {
-    //  using (var multipartFormContent = new MultipartFormDataContent()) {
-    //    //Add other fields
-    //    multipartFormContent.Add(new StringContent("123"), name: "UserId");
-    //    multipartFormContent.Add(new StringContent("Home insurance"), name: "Title");
-
-    //    //Add the file
-    //    var fileStreamContent = new StreamContent(File.OpenRead(fileFullName));
-    //    fileStreamContent.Headers.ContentType = new MediaTypeHeaderValue("Xml/xml");
-    //    multipartFormContent.Add(fileStreamContent, name: "file", fileName: Path.GetFileName(fileFullName));
-
-    //    //Send it
-    //    var response = await mHttpClient.PostAsync("https://192.168.114.1:7077", multipartFormContent);
-    //    response.EnsureSuccessStatusCode();
-    //    return await response.Content.ReadAsStringAsync();
-    //  }
-    //}
 
     public string BuildRackScanFileName(ScanType scanType) {
       DateTime creationDate = DateTime.Now;
@@ -148,25 +126,66 @@ namespace PblMauiShipment.Services {
         case ScanType.outgoing:
           filename = "RAO";
           break;
-        case ScanType.create:
+        case ScanType.register:
           filename = "REG";
           break;
       }
 
-      filename = string.Format("{0}-{1}-{2}.{3}.{4}-{5}.xml",
+      filename = string.Format("{0}-{1}-{2}.{3}.{4}-{5}.{6}.xml",
                                 filename,
                                     mDeviceInfo.DeviceName,
                                         creationDate.Year,
                                              creationDate.Month.ToString().PadLeft(2, '0'),
                                                 creationDate.Day.ToString().PadLeft(2, '0'),
-                                                     creationDate.ToLongTimeString().Replace(':', '.'));
+                                                     creationDate.ToLongTimeString().Replace(':', '.'),
+                                                        creationDate.Millisecond);
 
       return filename;
     }
 
+    public async Task<int> UploadFiles() {
+      DirectoryInfo di = new(mRackFileDirectory);
+      int fileCount = 0;
+      foreach (var fi in di.GetFiles()) {
+       if (await UploadFile(fi)) {
+          fileCount += 1;
+        }
+      }
+      return await Task.FromResult(fileCount);
+    }
+
+
+    public async Task<bool> UploadFile(FileInfo fileInfo) {
+      HttpClientHandler clientHandler = new HttpClientHandler();
+      clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+
+
+      var client = new HttpClient(clientHandler) {
+        BaseAddress = new("http://192.168.5.48:7077") //PblFit01
+        //BaseAddress = new("http://192.168.5.37:7070")
+        //BaseAddress = new("http://localhost:5128")
+      };
+
+      await using var stream = System.IO.File.OpenRead(fileInfo.FullName);
+      using var request = new HttpRequestMessage(HttpMethod.Post, "uploadfile");
+      using var content = new MultipartFormDataContent
+      {
+        { new StreamContent(stream), "file", Path.GetFileName(fileInfo.FullName) }
+      };
+
+      request.Content = content;
+      var response = await client.SendAsync(request);
+      response.EnsureSuccessStatusCode();
+      if (response.StatusCode == System.Net.HttpStatusCode.OK) {
+        fileInfo.Delete();
+      }
+      var Content = await response.Content.ReadAsStringAsync();
+      return response.StatusCode == System.Net.HttpStatusCode.OK;
+    }
+
 
     public async Task<List<RackScan>> GetMockRackScanList() {
-      rackScanList.Clear();
+      List<RackScan> rackScanList = new();
       rackScanList.Add(new RackScan() { ItemID = 1, Barcode = "00123", Type = ScanType.incoming, Scanned = DateTime.Parse("01.08.2022 08:01:00") });
       rackScanList.Add(new RackScan() { ItemID = 2, Barcode = "00124", Type = ScanType.incoming, Scanned = DateTime.Parse("01.08.2022 09:02:00") });
       rackScanList.Add(new RackScan() { ItemID = 3, Barcode = "00125", Type = ScanType.incoming, Scanned = DateTime.Parse("01.08.2022 10:03:00") });
@@ -175,9 +194,9 @@ namespace PblMauiShipment.Services {
       rackScanList.Add(new RackScan() { ItemID = 5, Barcode = "00224", Type = ScanType.outgoing, Scanned = DateTime.Parse("02.08.2022 09:02:00") });
       rackScanList.Add(new RackScan() { ItemID = 6, Barcode = "00225", Type = ScanType.outgoing, Scanned = DateTime.Parse("02.08.2022 10:03:00") });
 
-      rackScanList.Add(new RackScan() { ItemID = 7, Barcode = "00323", Type = ScanType.create, Scanned = DateTime.Parse("03.08.2022 08:01:00"), OwnerID = 1, OwnerName = "Porta" });
-      rackScanList.Add(new RackScan() { ItemID = 8, Barcode = "00324", Type = ScanType.create, Scanned = DateTime.Parse("03.08.2022 09:02:00"), OwnerID = 2, OwnerName = "Schuett" });
-      rackScanList.Add(new RackScan() { ItemID = 9, Barcode = "00325", Type = ScanType.create, Scanned = DateTime.Parse("03.08.2022 10:03:00"), OwnerID = 3, OwnerName = "Scholl" });
+      rackScanList.Add(new RackScan() { ItemID = 7, Barcode = "00323", Type = ScanType.register, Scanned = DateTime.Parse("03.08.2022 08:01:00"), OwnerID = 1, OwnerName = "Porta" });
+      rackScanList.Add(new RackScan() { ItemID = 8, Barcode = "00324", Type = ScanType.register, Scanned = DateTime.Parse("03.08.2022 09:02:00"), OwnerID = 2, OwnerName = "Schuett" });
+      rackScanList.Add(new RackScan() { ItemID = 9, Barcode = "00325", Type = ScanType.register, Scanned = DateTime.Parse("03.08.2022 10:03:00"), OwnerID = 3, OwnerName = "Scholl" });
 
       rackScanList.Add(new RackScan() { ItemID = 10, Barcode = "00423", Type = ScanType.incoming, Scanned = DateTime.Parse("01.08.2022 08:01:00") });
       rackScanList.Add(new RackScan() { ItemID = 11, Barcode = "00424", Type = ScanType.incoming, Scanned = DateTime.Parse("01.08.2022 09:02:00") });

@@ -1,7 +1,7 @@
 ﻿
 namespace PblMauiShipment.Models {
 
-  public enum ScanType { incoming, outgoing, create }
+  public enum ScanType { incoming, outgoing, register }
   public class RackScan {
     public int ItemID { get; set; }
     public ScanType Type { get; set; }
