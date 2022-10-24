@@ -35,6 +35,7 @@ namespace PblMauiShipment.ViewModels {
       jsonFileName = string.Format(@"{0}/{1}.json", rackScanService.DataDirectory, rackScanService.RackIncomingPrefix);
       UpdateRackScanJson();
       FilesToSend = FilesToSendQty();
+
     }
 
     #region Command's

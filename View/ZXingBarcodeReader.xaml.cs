@@ -12,9 +12,8 @@ public partial class ZXingBarcodeReader : ContentPage {
       Formats = BarcodeFormats.All
       ,Multiple = false
       ,AutoRotate = true
-      //,TryHarder = true
+      ,TryHarder = true      
     };
-    barcodeReader.IsTorchOn = true;
   }
 
   string mScantype = string.Empty;

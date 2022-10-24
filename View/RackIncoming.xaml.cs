@@ -9,6 +9,7 @@ public partial class RackIncoming : ContentPage {
     InitializeComponent();
     Title = Properties.Resources.RackIncomming;
     BindingContext = _viewIncomingModel = rackSannsIncomingViewModel;
+    FlashlightSwitch.IsToggled = false;
   }
 
   private void barcode_Completed(object sender, EventArgs e) {
@@ -18,4 +19,23 @@ public partial class RackIncoming : ContentPage {
     }
   }
 
+
+
+  private async void FlashlightSwitch_Toggled(object sender, ToggledEventArgs e) {
+      try {
+        if (FlashlightSwitch.IsToggled)
+          await Flashlight.Default.TurnOnAsync();
+        else
+          await Flashlight.Default.TurnOffAsync();
+      }
+      catch (FeatureNotSupportedException ex) {
+        // Handle not supported on device exception
+      }
+      catch (PermissionException ex) {
+        // Handle permission exception
+      }
+      catch (Exception ex) {
+        // Unable to turn on/off flashlight
+      }   
+  }
 }

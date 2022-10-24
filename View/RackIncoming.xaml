@@ -26,6 +26,7 @@
                WidthRequest="150"
                VerticalOptions="Center"              
                Style="{StaticResource LargeLabel}"
+               HorizontalTextAlignment="Center"
                />
         <ScrollView HorizontalOptions="CenterAndExpand"
                     VerticalOptions="StartAndExpand"
@@ -64,7 +65,7 @@
         <Label x:Name="filesToSendDesc" 
                Text="{Binding FilesToSend}"
                Grid.Column="1"
-               Grid.Row="3"
+               Grid.Row="4"
                HeightRequest="30"
                VerticalOptions="Center"    
                HorizontalOptions="Start"
@@ -73,7 +74,7 @@
         <Label x:Name="filesToSend" 
                Text="Dateien noch nicht hochgeladen:   "
                Grid.Column="0"
-               Grid.Row="3"
+               Grid.Row="4"
                HeightRequest="30"
                VerticalOptions="Center"    
                HorizontalOptions="EndAndExpand"
@@ -99,5 +100,24 @@
                 Grid.Row="4"
                 Grid.Column="0"
                 Style="{StaticResource ButtonOutline}"/>-->
+        <Label x:Name="lightSwitch" 
+               Text="Licht   "
+               Grid.Column="0"
+               Grid.Row="3"
+               HeightRequest="30"
+               VerticalOptions="Center"    
+               HorizontalOptions="EndAndExpand"
+               FontSize="Large"
+               />
+        <Switch IsToggled="true"
+                x:Name="FlashlightSwitch"               
+                Grid.Row="3"
+                Grid.Column="1"
+                HorizontalOptions="Start"
+                OnColor="Orange"
+                ThumbColor="Green"
+                Toggled="FlashlightSwitch_Toggled"
+                />
+
     </Grid>
 </ContentPage>

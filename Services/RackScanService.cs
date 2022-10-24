@@ -5,6 +5,7 @@ using System.Text;
 using System.Xml;
 using System.Text.Json;
 using PblMauiShipment.Models;
+
 //using AndroidX.Fragment.App;
 //using static Android.Graphics.ImageDecoder;
 
@@ -45,7 +46,6 @@ namespace PblMauiShipment.Services {
       Directory.CreateDirectory(mRackFileDirectory);
       mDeviceInfo.ReadDeviceInfo();
     }
-
 
     public async Task<bool> SaveRackScanListToXml(ObservableCollection<RackScan> rackScanList, ScanType scanType) {
       bool result = false;
