@@ -28,7 +28,8 @@ public partial class ZXingBarcodeReader : ContentPage {
     switch (mScantype) {
       case "incoming":
         Dispatcher.Dispatch(async () => {
-          retunedBarcode = $"{e.Results[0].Value} - {e.Results[0].Format}";
+          //retunedBarcode = $"{e.Results[0].Value} - {e.Results[0].Format}";
+          retunedBarcode = $"{e.Results[0].Value}";
           barcodeResult.Text = retunedBarcode;
           await Shell.Current.GoToAsync($"..?ZxingBarcodeStrIncomming={retunedBarcode}");
         });

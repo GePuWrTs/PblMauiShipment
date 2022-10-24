@@ -1,4 +1,5 @@
-﻿using PblMauiShipment.Models;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using PblMauiShipment.Models;
 using PblMauiShipment.Services;
 using System.Collections.Generic;
 using System.Reflection;
@@ -11,37 +12,65 @@ namespace PblMauiShipment.ViewModels {
   public partial class RackScanIncomingViewModel : BaseViewModel {
 
     public ObservableCollection<RackScan> RackScanns { get; set; } = new();
-    public int RackScannsCount {
-      get { return RackScanns.Count; }
-    }
+
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(ScanBarcodeIncommingCommand))]
     string zxingBarcodeStrIncomming;
 
+    public string BarcodeStrIncomming {
+      get { return zxingBarcodeStrIncomming; }
+    }
+
     string zxingBarcodeStrOld = string.Empty;
     RackScanService rackScanService = new RackScanService();
     string jsonFileName = String.Empty;
+
+    [ObservableProperty]
+    public int filesToSend;
 
 
     public RackScanIncomingViewModel(RackScanService rackScanService) {
       Title = Properties.Resources.RackScans;
       jsonFileName = string.Format(@"{0}/{1}.json", rackScanService.DataDirectory, rackScanService.RackIncomingPrefix);
       UpdateRackScanJson();
+      FilesToSend = FilesToSendQty();
     }
 
     #region Command's
     [RelayCommand]
     async Task<int> SendFile() {
       int FileCount = 0;
-     if(await rackScanService.SaveRackScanListToXml(RackScanns, ScanType.incoming)) {
-        await ClearRackScannsAsync();
-        FileInfo fi = new FileInfo(jsonFileName);
-        if (fi.Exists) {
-          fi.Delete();
+      int fileQty = FilesToSendQty();
+      try {
+        IsBusy = true;
+        if (await rackScanService.SaveRackScanListToXml(RackScanns, ScanType.incoming) || (fileQty > 0)) {
+          await ClearRackScannsAsync();
+          FileInfo fi = new FileInfo(jsonFileName);
+          if (fi.Exists) {
+            fi.Delete();
+          }
+          fileQty = FilesToSendQty();
+          FilesToSend = fileQty;
+          if (fileQty > 0) {
+            FileCount = await rackScanService.UploadFiles();
+            if (FileCount == 0) {
+              await Shell.Current.DisplayAlert("Error!", $"{FileCount} von {fileQty} Dateien gesendet!", "OK");
+            } else {
+              await Shell.Current.DisplayAlert("Upload", $"{FileCount} von {fileQty} Dateien gesendet", "OK");
+            }
+          }
         }
-        FileCount = await rackScanService.UploadFiles();
       }
+      catch (Exception) {
+
+        throw;
+      }
+      finally {
+        IsBusy = true;
+      }
+      FilesToSend = FilesToSendQty(); 
+
       return await Task.FromResult(FileCount);
     }
 
@@ -49,7 +78,6 @@ namespace PblMauiShipment.ViewModels {
     async Task ScanBarcodeIncommingAsync() {
       await Shell.Current.GoToAsync($"{nameof(ZXingBarcodeReader)}?scantype={ScanType.incoming.ToString()}", true);
     }
-
 
     [RelayCommand]
     async Task<bool> AddRackScannAsync(RackScan rackScan) {
@@ -122,7 +150,6 @@ namespace PblMauiShipment.ViewModels {
       }
     }
 
-
     [RelayCommand]
     public async Task<bool> SaveRAIRackScanListToXml() {
       if ((RackScanns != null) && (RackScanns.Count > 0)) {
@@ -142,9 +169,12 @@ namespace PblMauiShipment.ViewModels {
       }
     }
 
+    public int FilesToSendQty() {
+      DirectoryInfo di = new DirectoryInfo(rackScanService.RackFileDirectory);
+      return di.GetFiles().Count();
+    }
+
     public void UpdateRackScanJson() {
-
-
       FileInfo FiJson = new FileInfo(jsonFileName);
       if (FiJson.Exists) {
         if (RackScanns.Count == 0) {

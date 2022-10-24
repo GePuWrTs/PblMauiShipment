@@ -5,6 +5,7 @@ using System.Text;
 using System.Xml;
 using System.Text.Json;
 using PblMauiShipment.Models;
+//using AndroidX.Fragment.App;
 //using static Android.Graphics.ImageDecoder;
 
 namespace PblMauiShipment.Services {
@@ -147,8 +148,10 @@ namespace PblMauiShipment.Services {
       DirectoryInfo di = new(mRackFileDirectory);
       int fileCount = 0;
       foreach (var fi in di.GetFiles()) {
-       if (await UploadFile(fi)) {
-          fileCount += 1;
+        if (await UploadFile(fi)) {
+          fileCount++;
+        }else {
+          return await Task.FromResult(fileCount);
         }
       }
       return await Task.FromResult(fileCount);
@@ -158,13 +161,14 @@ namespace PblMauiShipment.Services {
     public async Task<bool> UploadFile(FileInfo fileInfo) {
       HttpClientHandler clientHandler = new HttpClientHandler();
       clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
-
+      bool result = false; 
 
       var client = new HttpClient(clientHandler) {
         BaseAddress = new("http://192.168.5.48:7077") //PblFit01
         //BaseAddress = new("http://192.168.5.37:7070")
         //BaseAddress = new("http://localhost:5128")
       };
+      client.Timeout = new TimeSpan(0, 0, 5);
 
       await using var stream = System.IO.File.OpenRead(fileInfo.FullName);
       using var request = new HttpRequestMessage(HttpMethod.Post, "uploadfile");
@@ -174,13 +178,21 @@ namespace PblMauiShipment.Services {
       };
 
       request.Content = content;
-      var response = await client.SendAsync(request);
-      response.EnsureSuccessStatusCode();
-      if (response.StatusCode == System.Net.HttpStatusCode.OK) {
-        fileInfo.Delete();
+      try {
+        var response = await client.SendAsync(request);
+        response.EnsureSuccessStatusCode();
+        result = response.StatusCode == System.Net.HttpStatusCode.OK;
+        if (result) {
+          fileInfo.Delete();
+        }
+        var Content = await response.Content.ReadAsStringAsync();
       }
-      var Content = await response.Content.ReadAsStringAsync();
-      return response.StatusCode == System.Net.HttpStatusCode.OK;
+      catch (Exception) {
+        return result;
+      }
+      finally {
+      }
+      return result;
     }
 
 

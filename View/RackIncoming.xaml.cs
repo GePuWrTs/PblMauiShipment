@@ -9,14 +9,12 @@ public partial class RackIncoming : ContentPage {
     InitializeComponent();
     Title = Properties.Resources.RackIncomming;
     BindingContext = _viewIncomingModel = rackSannsIncomingViewModel;
-    scannedCount.Text = _viewIncomingModel.RackScannsCount.ToString();
   }
 
   private void barcode_Completed(object sender, EventArgs e) {
     if (barcode_incomming.Text != string.Empty) {
       _viewIncomingModel.ZxingBarcodeStrIncomming = barcode_incomming.Text;
       barcode_incomming.Text = string.Empty;
-      scannedCount.Text = _viewIncomingModel.RackScannsCount.ToString();
     }
   }
 

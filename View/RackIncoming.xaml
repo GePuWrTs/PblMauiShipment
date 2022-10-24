@@ -17,13 +17,14 @@
                Grid.Column="0"
                Grid.ColumnSpan="2"
                HeightRequest="50"
+               FontSize="Large"
                Completed="barcode_Completed"/>
         <Label x:Name="scannedCount" 
-               Text="{Binding RackScannsCount}"
+               Text="{Binding RackScanns.Count}"
                Grid.Column="2"
                HeightRequest="30"
                WidthRequest="150"
-               VerticalOptions="Center"
+               VerticalOptions="Center"              
                Style="{StaticResource LargeLabel}"
                />
         <ScrollView HorizontalOptions="CenterAndExpand"
@@ -42,9 +43,9 @@
                     <DataTemplate x:DataType="model:RackScan">
                         <Grid ColumnDefinitions="Auto,*,*"
                               ColumnSpacing="5">
-                            <Label HeightRequest="20" Grid.Column="0" Text="{Binding Barcode}"></Label>
-                            <Label HeightRequest="20" Grid.Column="1" Text="{Binding Scanned}"></Label>
-                            <Label HeightRequest="20" Grid.Column="2" Text="{Binding ItemID}"></Label>
+                            <Label HeightRequest="30" Grid.Column="0" Text="{Binding Barcode}" FontSize="Large"></Label>
+                            <!--<Label HeightRequest="20" Grid.Column="1" Text="{Binding Scanned}"></Label>
+                            <Label HeightRequest="20" Grid.Column="2" Text="{Binding ItemID}"></Label>-->
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
@@ -60,7 +61,26 @@
                 Grid.Row="2"
                 Grid.Column="2"
                 Style="{StaticResource ButtonOutline}"/>
-        <Button Text="Get Test Data"
+        <Label x:Name="filesToSendDesc" 
+               Text="{Binding FilesToSend}"
+               Grid.Column="1"
+               Grid.Row="3"
+               HeightRequest="30"
+               VerticalOptions="Center"    
+               HorizontalOptions="Start"
+               FontSize="Large"
+               />
+        <Label x:Name="filesToSend" 
+               Text="Dateien noch nicht hochgeladen:   "
+               Grid.Column="0"
+               Grid.Row="3"
+               HeightRequest="30"
+               VerticalOptions="Center"    
+               HorizontalOptions="EndAndExpand"
+               FontSize="Large"
+               />
+
+        <!--<Button Text="Get Test Data"
                 Command="{Binding GetMockRackScannsCommand}"
                 Grid.Row="3"
                 Style="{StaticResource ButtonOutline}"/>
@@ -78,6 +98,6 @@
                 Command="{Binding SaveRAIRackScanListToXmlCommand}"
                 Grid.Row="4"
                 Grid.Column="0"
-                Style="{StaticResource ButtonOutline}"/>
+                Style="{StaticResource ButtonOutline}"/>-->
     </Grid>
 </ContentPage>

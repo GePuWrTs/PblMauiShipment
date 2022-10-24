@@ -13,6 +13,7 @@ namespace PblMauiShipment.ViewModels {
     [ObservableProperty]
     string title;
 
+
     public bool IsNotBusy => !IsBusy;
 
 
