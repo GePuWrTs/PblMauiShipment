@@ -9,10 +9,10 @@ public partial class RackIncoming : ContentPage {
     InitializeComponent();
     Title = Properties.Resources.RackIncomming;
     BindingContext = _viewIncomingModel = rackSannsIncomingViewModel;
-    FlashlightSwitch.IsToggled = false;
+    FlashlightSwitchIncomming.IsToggled = false;
   }
 
-  private void barcode_Completed(object sender, EventArgs e) {
+  private void barcodeIncomming_Completed(object sender, EventArgs e) {
     if (barcode_incomming.Text != string.Empty) {
       _viewIncomingModel.ZxingBarcodeStrIncomming = barcode_incomming.Text;
       barcode_incomming.Text = string.Empty;
@@ -21,9 +21,9 @@ public partial class RackIncoming : ContentPage {
 
 
 
-  private async void FlashlightSwitch_Toggled(object sender, ToggledEventArgs e) {
+  private async void FlashlightSwitchIncomming_Toggled(object sender, ToggledEventArgs e) {
       try {
-        if (FlashlightSwitch.IsToggled)
+        if (FlashlightSwitchIncomming.IsToggled)
           await Flashlight.Default.TurnOnAsync();
         else
           await Flashlight.Default.TurnOffAsync();

@@ -18,9 +18,9 @@
                Grid.ColumnSpan="2"
                HeightRequest="50"
                FontSize="Large"
-               Completed="barcode_Completed"/>
-        <Label x:Name="scannedCount" 
-               Text="{Binding RackScanns.Count}"
+               Completed="barcodeIncomming_Completed"/>
+        <Label x:Name="scannedCountIncomming" 
+               Text="{Binding RackScannsIncomming.Count}"
                Grid.Column="2"
                HeightRequest="30"
                WidthRequest="150"
@@ -34,7 +34,7 @@
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
                     Grid.RowSpan="2">
-            <CollectionView ItemsSource="{Binding RackScanns}"
+            <CollectionView ItemsSource="{Binding RackScannsIncomming}"
                             SelectionMode="None"
                             VerticalOptions="StartAndExpand">
                 <CollectionView.EmptyView>
@@ -58,12 +58,12 @@
                 Grid.Column="2"
                 Style="{StaticResource ButtonOutline}"/>
         <Button Text="Send"
-                Command="{Binding SendFileCommand}"
+                Command="{Binding SendFileIncommingCommand}"
                 Grid.Row="2"
                 Grid.Column="2"
                 Style="{StaticResource ButtonOutline}"/>
-        <Label x:Name="filesToSendDesc" 
-               Text="{Binding FilesToSend}"
+        <Label x:Name="filesToSendIncommingDesc" 
+               Text="{Binding FilesToSendIncomming}"
                Grid.Column="1"
                Grid.Row="4"
                HeightRequest="30"
@@ -71,7 +71,7 @@
                HorizontalOptions="Start"
                FontSize="Large"
                />
-        <Label x:Name="filesToSend" 
+        <Label x:Name="filesToSendIncomming" 
                Text="Dateien noch nicht hochgeladen:   "
                Grid.Column="0"
                Grid.Row="4"
@@ -100,7 +100,7 @@
                 Grid.Row="4"
                 Grid.Column="0"
                 Style="{StaticResource ButtonOutline}"/>-->
-        <Label x:Name="lightSwitch" 
+        <Label x:Name="lightSwitchIncomming" 
                Text="Licht   "
                Grid.Column="0"
                Grid.Row="3"
@@ -110,13 +110,13 @@
                FontSize="Large"
                />
         <Switch IsToggled="true"
-                x:Name="FlashlightSwitch"               
+                x:Name="FlashlightSwitchIncomming"               
                 Grid.Row="3"
                 Grid.Column="1"
                 HorizontalOptions="Start"
                 OnColor="Orange"
                 ThumbColor="Green"
-                Toggled="FlashlightSwitch_Toggled"
+                Toggled="FlashlightSwitchIncomming_Toggled"
                 />
 
     </Grid>

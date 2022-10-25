@@ -11,7 +11,7 @@ namespace PblMauiShipment.ViewModels {
 
   public partial class RackScanIncomingViewModel : BaseViewModel {
 
-    public ObservableCollection<RackScan> RackScanns { get; set; } = new();
+    public ObservableCollection<RackScan> RackScannsIncomming { get; set; } = new();
 
 
     [ObservableProperty]
@@ -22,39 +22,39 @@ namespace PblMauiShipment.ViewModels {
       get { return zxingBarcodeStrIncomming; }
     }
 
-    string zxingBarcodeStrOld = string.Empty;
-    RackScanService rackScanService = new RackScanService();
-    string jsonFileName = String.Empty;
+    string zxingBarcodeStrIncommingOld = string.Empty;
+    RackScanService rackScanServiceIncomming = new RackScanService();
+    string jsonFileNameIncomming = String.Empty;
 
     [ObservableProperty]
-    public int filesToSend;
+    public int filesToSendIncomming;
 
 
     public RackScanIncomingViewModel(RackScanService rackScanService) {
       Title = Properties.Resources.RackScans;
-      jsonFileName = string.Format(@"{0}/{1}.json", rackScanService.DataDirectory, rackScanService.RackIncomingPrefix);
-      UpdateRackScanJson();
-      FilesToSend = FilesToSendQty();
+      jsonFileNameIncomming = string.Format(@"{0}/{1}.json", rackScanService.DataDirectory, rackScanService.RackIncomingPrefix);
+      UpdateRackScanJsonIncomming();
+      FilesToSendIncomming = FilesToSendQtyIncomming();
 
     }
 
     #region Command's
     [RelayCommand]
-    async Task<int> SendFile() {
+    async Task<int> SendFileIncomming() {
       int FileCount = 0;
-      int fileQty = FilesToSendQty();
+      int fileQty = FilesToSendQtyIncomming();
       try {
         IsBusy = true;
-        if (await rackScanService.SaveRackScanListToXml(RackScanns, ScanType.incoming) || (fileQty > 0)) {
-          await ClearRackScannsAsync();
-          FileInfo fi = new FileInfo(jsonFileName);
+        if (await rackScanServiceIncomming.SaveRackScanListToXml(RackScannsIncomming, ScanType.incoming) || (fileQty > 0)) {
+          await ClearRackScannsIncommingAsync();
+          FileInfo fi = new FileInfo(jsonFileNameIncomming);
           if (fi.Exists) {
             fi.Delete();
           }
-          fileQty = FilesToSendQty();
-          FilesToSend = fileQty;
+          fileQty = FilesToSendQtyIncomming();
+          FilesToSendIncomming = fileQty;
           if (fileQty > 0) {
-            FileCount = await rackScanService.UploadFiles();
+            FileCount = await rackScanServiceIncomming.UploadFiles();
             if (FileCount == 0) {
               await Shell.Current.DisplayAlert("Error!", $"{FileCount} von {fileQty} Dateien gesendet!", "OK");
             } else {
@@ -70,7 +70,7 @@ namespace PblMauiShipment.ViewModels {
       finally {
         IsBusy = true;
       }
-      FilesToSend = FilesToSendQty(); 
+      FilesToSendIncomming = FilesToSendQtyIncomming(); 
 
       return await Task.FromResult(FileCount);
     }
@@ -81,26 +81,26 @@ namespace PblMauiShipment.ViewModels {
     }
 
     [RelayCommand]
-    async Task<bool> AddRackScannAsync(RackScan rackScan) {
+    async Task<bool> AddRackScannIncommingAsync(RackScan rackScan) {
       if (rackScan != null) {
-        if (RackScanns.Count == 0) {
-          UpdateRackScanJson();
+        if (RackScannsIncomming.Count == 0) {
+          UpdateRackScanJsonIncomming();
         }
-        if (zxingBarcodeStrOld != ZxingBarcodeStrIncomming) {
-          zxingBarcodeStrOld = ZxingBarcodeStrIncomming;
+        if (zxingBarcodeStrIncommingOld != ZxingBarcodeStrIncomming) {
+          zxingBarcodeStrIncommingOld = ZxingBarcodeStrIncomming;
 
-          var rs = RackScanns.FirstOrDefault(b => (b.Barcode == rackScan.Barcode));
+          var rs = RackScannsIncomming.FirstOrDefault(b => (b.Barcode == rackScan.Barcode));
           if (rs != null) {
             await PlayErrorAsync();
             await Shell.Current.DisplayAlert("Error!", $"Barcode {rackScan.Barcode} bereits in Liste!", "OK");
           } else {
-            if (RackScanns.Count > 0) {
-              rackScan.ItemID = RackScanns.Last().ItemID + 1;
+            if (RackScannsIncomming.Count > 0) {
+              rackScan.ItemID = RackScannsIncomming.Last().ItemID + 1;
             } else
               rackScan.ItemID = 1;
             rackScan.Scanned = DateTime.Now;
-            RackScanns.Add(rackScan);
-            UpdateRackScanJson();
+            RackScannsIncomming.Add(rackScan);
+            UpdateRackScanJsonIncomming();
             await PlayBeepAsync();
           }
         }
@@ -110,22 +110,22 @@ namespace PblMauiShipment.ViewModels {
 
 
     [RelayCommand]
-    async Task<bool> DeleteRackScannAsync(int itemID) {
-      var oldRackScan = RackScanns.Where(r => r.ItemID == itemID).FirstOrDefault();
-      RackScanns.Remove(oldRackScan);
+    async Task<bool> DeleteRackScannÎncommingAsync(int itemID) {
+      var oldRackScan = RackScannsIncomming.Where(r => r.ItemID == itemID).FirstOrDefault();
+      RackScannsIncomming.Remove(oldRackScan);
       return await Task.FromResult(true);
     }
 
     [RelayCommand]
-    async Task GetMockRackScannsAsync() {
+    async Task GetMockRackScannsIncommingAsync() {
       try {
         IsBusy = true;
-        var rackScannMock = await rackScanService.GetMockRackScanList();
-        if (RackScanns.Count != 0)
-          RackScanns.Clear();
+        var rackScannMock = await rackScanServiceIncomming.GetMockRackScanList();
+        if (RackScannsIncomming.Count != 0)
+          RackScannsIncomming.Clear();
 
         foreach (var rackscan in rackScannMock)
-          RackScanns.Add(rackscan);
+          RackScannsIncomming.Add(rackscan);
       }
       catch (Exception ex) {
         Debug.WriteLine($"Unable to get Mock Rackscanns: {ex.Message}");
@@ -137,10 +137,10 @@ namespace PblMauiShipment.ViewModels {
     }
 
     [RelayCommand]
-    async Task ClearRackScannsAsync() {
+    async Task ClearRackScannsIncommingAsync() {
       try {
         IsBusy = true;
-        RackScanns.Clear();
+        RackScannsIncomming.Clear();
       }
       catch (Exception ex) {
         Debug.WriteLine($"Unable to clear Rackscanns: {ex.Message}");
@@ -153,8 +153,8 @@ namespace PblMauiShipment.ViewModels {
 
     [RelayCommand]
     public async Task<bool> SaveRAIRackScanListToXml() {
-      if ((RackScanns != null) && (RackScanns.Count > 0)) {
-        return await rackScanService.SaveRackScanListToXml(RackScanns, ScanType.incoming);
+      if ((RackScannsIncomming != null) && (RackScannsIncomming.Count > 0)) {
+        return await rackScanServiceIncomming.SaveRackScanListToXml(RackScannsIncomming, ScanType.incoming);
       }
       return await Task.FromResult(false);
     }
@@ -165,33 +165,33 @@ namespace PblMauiShipment.ViewModels {
         RackScan rs = new();
         rs.Barcode = value;
         rs.Type = ScanType.incoming;
-        AddRackScannCommand.ExecuteAsync(rs);
+        AddRackScannIncommingCommand.ExecuteAsync(rs);
         ZxingBarcodeStrIncomming = string.Empty;
       }
     }
 
-    public int FilesToSendQty() {
-      DirectoryInfo di = new DirectoryInfo(rackScanService.RackFileDirectory);
+    public int FilesToSendQtyIncomming() {
+      DirectoryInfo di = new DirectoryInfo(rackScanServiceIncomming.RackFileDirectory);
       return di.GetFiles().Count();
     }
 
-    public void UpdateRackScanJson() {
-      FileInfo FiJson = new FileInfo(jsonFileName);
+    public void UpdateRackScanJsonIncomming() {
+      FileInfo FiJson = new FileInfo(jsonFileNameIncomming);
       if (FiJson.Exists) {
-        if (RackScanns.Count == 0) {
+        if (RackScannsIncomming.Count == 0) {
           using (StreamReader r = new StreamReader(FiJson.FullName)) {
             string json = r.ReadToEnd();
-            RackScanns = JsonSerializer.Deserialize<ObservableCollection<RackScan>>(json);
+            RackScannsIncomming = JsonSerializer.Deserialize<ObservableCollection<RackScan>>(json);
           }
         } else {
-          string jsonString = JsonSerializer.Serialize(RackScanns, new JsonSerializerOptions() { WriteIndented = true });
+          string jsonString = JsonSerializer.Serialize(RackScannsIncomming, new JsonSerializerOptions() { WriteIndented = true });
           using (StreamWriter outputFile = new StreamWriter(FiJson.FullName)) {
             outputFile.WriteLine(jsonString);
           }
         }
       } else {
-        if (RackScanns.Count > 0) {
-          string jsonString = JsonSerializer.Serialize(RackScanns, new JsonSerializerOptions() { WriteIndented = true });
+        if (RackScannsIncomming.Count > 0) {
+          string jsonString = JsonSerializer.Serialize(RackScannsIncomming, new JsonSerializerOptions() { WriteIndented = true });
           using (StreamWriter outputFile = new StreamWriter(FiJson.FullName)) {
             outputFile.WriteLine(jsonString);
           }
