@@ -7,7 +7,7 @@ public partial class RackRegister : ContentPage
   public RackRegister(RackScanRegisterViewModel rackSannsRegisterViewModel)
 	{
 		InitializeComponent();
-    Title = Properties.Resources.RackIncomming;
+    Title = Properties.Resources.RackRegistation;
     BindingContext = _viewRegisterModel = rackSannsRegisterViewModel;
     //FlashlightSwitchRegister.IsToggled = false;
   }

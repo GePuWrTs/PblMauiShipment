@@ -120,6 +120,9 @@
   <data name="RackIncomming" xml:space="preserve">
     <value>Gestell Eingang</value>
   </data>
+  <data name="RackRegistation" xml:space="preserve">
+    <value>Gestell Registrieren</value>
+  </data>
   <data name="RackScans" xml:space="preserve">
     <value>Gestell Scanns</value>
   </data>

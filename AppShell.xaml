@@ -11,9 +11,9 @@
         <ShellContent Title="Gestell Eingang"
                       ContentTemplate="{DataTemplate pages:RackIncoming}"
                       Route="RackIncoming"/>
-        <ShellContent Title="Gestell Ausgang"
+        <!--<ShellContent Title="Gestell Ausgang"
                       ContentTemplate="{DataTemplate pages:RackOutgoing}"
-                      Route="RackOutgoing"/>
+                      Route="RackOutgoing"/>-->
         <ShellContent Title="Gestell Registrieren"
                       ContentTemplate="{DataTemplate pages:RackRegister}"
                       Route="RackRegister"/>

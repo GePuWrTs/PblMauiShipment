@@ -70,6 +70,15 @@ namespace PblMauiShipment.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Gestell Registrieren.
+        /// </summary>
+        public static string RackRegistation {
+            get {
+                return ResourceManager.GetString("RackRegistation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Gestell Scanns.
         /// </summary>
         public static string RackScans {
