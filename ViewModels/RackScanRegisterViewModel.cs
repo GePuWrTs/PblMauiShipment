@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PblMauiShipment.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,6 @@ namespace PblMauiShipment.ViewModels {
 
     public ObservableCollection<RackScan> RackScannsRegister { get; set; } = new();
 
-
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(ScanBarcodeRegisterCommand))]
     string zxingBarcodeStrRegister;
@@ -24,27 +24,43 @@ namespace PblMauiShipment.ViewModels {
 
     string zxingBarcodeStrRegisterOld = string.Empty;
     RackScanService rackScanServiceRegister = new RackScanService();
-    string jsonFileNameRegister = String.Empty;
+    string jsonFileNameRegister = string.Empty;
+    string jsonFileNameOwnerPickerSelected = string.Empty;
 
     [ObservableProperty]
     public int filesToSendRegister;
 
+    [ObservableProperty]
+    public List<RackOwner> rackOwnerList;
+
+    [ObservableProperty]
+    public RackOwner rackOwnerSelected;
+
     public RackScanRegisterViewModel(RackScanService rackScanService) {
       Title = Properties.Resources.RackScans;
       jsonFileNameRegister = string.Format(@"{0}/{1}.json", rackScanServiceRegister.DataDirectory, rackScanServiceRegister.RackRegisterPrefix);
+      jsonFileNameOwnerPickerSelected = string.Format(@"{0}/{1}.json", rackScanServiceRegister.DataDirectory, "OwnerSelected.json");
       UpdateRackScanJsonRegister();
+      //UpdateOwnerPickerSelectedJsonRegister();
       filesToSendRegister = FilesToSendQtyRegister();
-
+      RackOwnerList = rackScanServiceRegister.RackOwnerlistRackScanService;
     }
 
     #region Command's
+    [RelayCommand]
+    async Task<bool> DownloadFileRegister() {
+      bool result = false;
+      result = await rackScanServiceRegister.DownloadFile(rackScanServiceRegister.DataDirectory, "RackOwnerList.XML");
+      return result;
+    }
+
     [RelayCommand]
     async Task<int> SendFileRegister() {
       int FileCount = 0;
       int fileQty = FilesToSendQtyRegister();
       try {
         IsBusy = true;
-        if (await rackScanServiceRegister.SaveRackScanListToXml(RackScannsRegister, ScanType.incoming) || (fileQty > 0)) {
+        if (await rackScanServiceRegister.SaveRackScanListToXml(RackScannsRegister, ScanType.register) || (fileQty > 0)) {
           await ClearRackScannsRegisterAsync();
           FileInfo fi = new FileInfo(jsonFileNameRegister);
           if (fi.Exists) {
@@ -81,9 +97,15 @@ namespace PblMauiShipment.ViewModels {
 
     [RelayCommand]
     async Task<bool> AddRackScannRegisterAsync(RackScan rackScan) {
-      if (rackScan != null) {
+      if ((RackOwnerSelected == null) ||(RackOwnerSelected.ID == 0)) {
+        await PlayErrorAsync();
+        await Shell.Current.DisplayAlert("Error!", $"Bitte Gestellbesitzer wählen", "OK");
+        return false;
+      }
+      if ((rackScan != null) && (rackOwnerSelected.ID != 0)) {
         if (RackScannsRegister.Count == 0) {
           UpdateRackScanJsonRegister();
+          //UpdateOwnerPickerSelectedJsonRegister();
         }
         if (zxingBarcodeStrRegisterOld != ZxingBarcodeStrRegister) {
           zxingBarcodeStrRegisterOld = ZxingBarcodeStrRegister;
@@ -98,8 +120,11 @@ namespace PblMauiShipment.ViewModels {
             } else
               rackScan.ItemID = 1;
             rackScan.Scanned = DateTime.Now;
+            rackScan.OwnerID = rackOwnerSelected.ID;
+            rackScan.OwnerName = rackOwnerSelected.OwnerName;
             RackScannsRegister.Add(rackScan);
             UpdateRackScanJsonRegister();
+            //UpdateOwnerPickerSelectedJsonRegister();
             await PlayBeepAsync();
           }
         }
@@ -163,7 +188,7 @@ namespace PblMauiShipment.ViewModels {
       if (ZxingBarcodeStrRegister != String.Empty) {
         RackScan rs = new();
         rs.Barcode = value;
-        rs.Type = ScanType.incoming;
+        rs.Type = ScanType.register;
         AddRackScannRegisterCommand.ExecuteAsync(rs);
         ZxingBarcodeStrRegister = string.Empty;
       }
@@ -198,6 +223,29 @@ namespace PblMauiShipment.ViewModels {
       }
     }
 
+    //public void UpdateOwnerPickerSelectedJsonRegister() {
+    //  FileInfo FiJson = new FileInfo(jsonFileNameOwnerPickerSelected);
+    //  if (FiJson.Exists) {
+    //    if ((RackOwnerSelected != null) && (RackOwnerSelected.ID == 0)) {
+    //      using (StreamReader r = new StreamReader(FiJson.FullName)) {
+    //        string json = r.ReadToEnd();
+    //        RackOwnerSelected = JsonSerializer.Deserialize<RackOwner>(json);
+    //      }
+    //    } else {
+    //      string jsonString = JsonSerializer.Serialize(RackOwnerSelected, new JsonSerializerOptions() { WriteIndented = true });
+    //      using (StreamWriter outputFile = new StreamWriter(FiJson.FullName)) {
+    //        outputFile.WriteLine(jsonString);
+    //      }
+    //    }
+    //  } else {
+    //    if ((RackOwnerSelected != null) && (RackOwnerSelected.ID > 0)) {
+    //      string jsonString = JsonSerializer.Serialize(RackOwnerSelected, new JsonSerializerOptions() { WriteIndented = true });
+    //      using (StreamWriter outputFile = new StreamWriter(FiJson.FullName)) {
+    //        outputFile.WriteLine(jsonString);
+    //      }
+    //    }
+    //  }
+    //}
 
   }
 }

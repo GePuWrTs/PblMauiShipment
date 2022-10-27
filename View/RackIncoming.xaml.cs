@@ -9,7 +9,6 @@ public partial class RackIncoming : ContentPage {
     InitializeComponent();
     Title = Properties.Resources.RackIncomming;
     BindingContext = _viewIncomingModel = rackSannsIncomingViewModel;
-    FlashlightSwitchIncomming.IsToggled = false;
   }
 
   private void barcodeIncomming_Completed(object sender, EventArgs e) {

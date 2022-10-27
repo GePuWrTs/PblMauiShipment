@@ -9,7 +9,7 @@
 
     <FlyoutItem Title="Versand">
         <ShellContent Title="Gestell Eingang"
-                      ContentTemplate="{DataTemplate pages:RackIncoming}"
+                      ContentTemplate="{DataTemplate pages:RackIncoming}"                    
                       Route="RackIncoming"/>
         <!--<ShellContent Title="Gestell Ausgang"
                       ContentTemplate="{DataTemplate pages:RackOutgoing}"

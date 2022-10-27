@@ -6,7 +6,7 @@
              xmlns:model="clr-namespace:PblMauiShipment.Models"
              xmlns:viewmodel="clr-namespace:PblMauiShipment.ViewModels"
               x:Class="PblMauiShipment.View.ZXingBarcodeReader"
-             x:DataType="viewmodel:RackScanBaseViewModel"
+             x:DataType="viewmodel:BaseViewModel"
              Title="ZXingBarcodeReader">
     <VerticalStackLayout Spacing="30"
                          Padding="30,0"
@@ -18,8 +18,7 @@
                                        IsTorchOn="True"                                         
                                        BarcodesDetected="barcodeReader_BarcodesDetected"/>
         <Label x:Name="barcodeResult"
-               Text="Mal Testen"/>
-
+               Text="Barcode"/>
 
     </VerticalStackLayout>
 </ContentPage>

@@ -5,6 +5,7 @@ using System.Text;
 using System.Xml;
 using System.Text.Json;
 using PblMauiShipment.Models;
+using System.IO;
 
 //using AndroidX.Fragment.App;
 //using static Android.Graphics.ImageDecoder;
@@ -19,7 +20,17 @@ namespace PblMauiShipment.Services {
     private const string mRackOutgoingPrefix = "RAO";
     private const string mRackRegisterPrefix = "REG";
 
+    private const string mRackOwnerListFileName = "RackOwnerList.XML";
+
+ 
+    private Uri mBaseAddress = new("http://192.168.5.48:7077"); //PblFit01
+    //private static Uri mBaseAddress = new("http://192.168.168.37:5107"); //NBPUF01 WRTS
+    //private Uri mBaseAddress = new("http://localhost:5107"); //NBPUF01 WRTS
+
+
     #region Properies
+    public List<RackOwner> RackOwnerlistRackScanService { get; set; }
+
     public string DataDirectory {
       get { return mDataDirectory; }
     }
@@ -45,8 +56,36 @@ namespace PblMauiShipment.Services {
       mRackFileDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "rackFiles");
       Directory.CreateDirectory(mRackFileDirectory);
       mDeviceInfo.ReadDeviceInfo();
+      var result = Task.Run<bool>(async () => await GetOwnerList()).Wait(new TimeSpan(0,0,10));
+      if (result) {
+        result = false;
+      }
     }
 
+    public async Task<bool> GetOwnerList() {
+      await DownloadFile(DataDirectory, mRackOwnerListFileName);
+      RackOwnerlistRackScanService = await CreateOwnerList();
+      return await Task.FromResult(RackOwnerlistRackScanService.Count > 0);
+    }
+
+
+    public async Task<List<RackOwner>> CreateOwnerList() {
+      List<RackOwner> Ol = new();
+      FileInfo fi = new FileInfo(Path.Combine(mDataDirectory, mRackOwnerListFileName));
+      if (fi.Exists) {
+        XmlDocument xmlDoc = new XmlDocument();
+        xmlDoc.Load(fi.FullName);
+        XmlNodeList xl = xmlDoc.SelectNodes("//RackOwners/Owners/Owner");
+        foreach (XmlNode xn in xl) {
+          RackOwner ro = new();
+          ro.ID = int.Parse(xn.SelectSingleNode("ID").InnerText);
+          ro.OwnerName = xn.SelectSingleNode("OwnerName").InnerText;
+          Ol.Add(ro);
+        }
+      }
+      return await Task.FromResult(Ol);
+    }
+  
     public async Task<bool> SaveRackScanListToXml(ObservableCollection<RackScan> rackScanList, ScanType scanType) {
       bool result = false;
       if ((rackScanList != null) && (rackScanList.Count > 0)) {
@@ -102,6 +141,14 @@ namespace PblMauiShipment.Services {
           XmlElement Scanned = XDoc.CreateElement("Scanned");
           Scanned.InnerText = rack.Scanned.ToString(mProvider);
           XItem.AppendChild(Scanned);
+          if (scanType == ScanType.register) {
+            XmlElement OwnerID = XDoc.CreateElement("OwnerID");
+            OwnerID.InnerText = rack.OwnerID.ToString(mProvider);
+            XItem.AppendChild(OwnerID);
+            XmlElement OwnerName = XDoc.CreateElement("OwnerName");
+            OwnerName.InnerText = rack.OwnerName.ToString(mProvider);
+            XItem.AppendChild(OwnerName);
+          }
           XLines.AppendChild(XItem);
         }
         XRoot.AppendChild(XLines);
@@ -115,7 +162,7 @@ namespace PblMauiShipment.Services {
       return await Task.FromResult(result);
 
     }
-
+  
     public string BuildRackScanFileName(ScanType scanType) {
       DateTime creationDate = DateTime.Now;
       string filename = string.Empty;
@@ -144,6 +191,37 @@ namespace PblMauiShipment.Services {
       return filename;
     }
 
+   
+    public async Task<bool> DownloadFile(string path, string fileName) {
+      string url = $"{mBaseAddress.ToString()}downloadfile?fileName={Path.GetFileName(fileName)}";
+      HttpClientHandler clientHandler = new HttpClientHandler();
+      clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+      bool result = false;
+
+      var client = new HttpClient(clientHandler);
+      client.Timeout = new TimeSpan(0, 0, 5);
+
+      try {
+        var response = await client.GetAsync(url);
+        response.EnsureSuccessStatusCode();
+        result = response.StatusCode == System.Net.HttpStatusCode.OK;
+        if (response.IsSuccessStatusCode) {
+          using (Stream streamToReadFrom = await response.Content.ReadAsStreamAsync()) {
+            string fileNameToSave = Path.Combine(path, response.Content.Headers.ContentDisposition.FileNameStar);
+            FileStream fs = new FileStream(fileNameToSave, FileMode.Create, FileAccess.Write);
+            ((MemoryStream)streamToReadFrom).WriteTo(fs);
+            fs.Close();
+            streamToReadFrom.Dispose();
+          }
+        }
+      }
+      catch (Exception) {
+        return result;
+      }
+
+      return result;
+    }
+
     public async Task<int> UploadFiles() {
       DirectoryInfo di = new(mRackFileDirectory);
       int fileCount = 0;
@@ -157,16 +235,13 @@ namespace PblMauiShipment.Services {
       return await Task.FromResult(fileCount);
     }
 
-
     public async Task<bool> UploadFile(FileInfo fileInfo) {
       HttpClientHandler clientHandler = new HttpClientHandler();
       clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
       bool result = false; 
 
       var client = new HttpClient(clientHandler) {
-        BaseAddress = new("http://192.168.5.48:7077") //PblFit01
-        //BaseAddress = new("http://192.168.5.37:7070")
-        //BaseAddress = new("http://localhost:5128")
+        BaseAddress = mBaseAddress
       };
       client.Timeout = new TimeSpan(0, 0, 5);
 
@@ -194,7 +269,6 @@ namespace PblMauiShipment.Services {
       }
       return result;
     }
-
 
     public async Task<List<RackScan>> GetMockRackScanList() {
       List<RackScan> rackScanList = new();

@@ -9,7 +9,6 @@ public partial class RackRegister : ContentPage
 		InitializeComponent();
     Title = Properties.Resources.RackRegistation;
     BindingContext = _viewRegisterModel = rackSannsRegisterViewModel;
-    //FlashlightSwitchRegister.IsToggled = false;
   }
 
   private void barcode_register_Completed(object sender, EventArgs e) {
@@ -34,6 +33,19 @@ public partial class RackRegister : ContentPage
     }
     catch (Exception ex) {
       // Unable to turn on/off flashlight
+    }
+
+  }
+
+  private void rackOwner_SelectedIndexChanged(object sender, EventArgs e) {
+    //>SelectedIndexChanged="rackOwner_SelectedIndexChanged"
+
+    var picker = (Picker)sender;
+    int selectedIndex = picker.SelectedIndex;
+
+    if (selectedIndex != -1) {
+      var p = picker.ItemsSource[selectedIndex];
+      _viewRegisterModel.RackOwnerSelected = (RackOwner)p;
     }
 
   }

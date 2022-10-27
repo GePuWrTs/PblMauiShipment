@@ -2,38 +2,54 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PblMauiShipment.View.RackRegister"
-             Title="RackRegister"
              xmlns:local="clr-namespace:PblMauiShipment"
              xmlns:model="clr-namespace:PblMauiShipment.Models"
              xmlns:viewmodel="clr-namespace:PblMauiShipment.ViewModels"
              xmlns:zxing="clr-namespace:ZXing.Net.Maui.Controls;assembly=ZXing.Net.MAUI"
              x:DataType="viewmodel:RackScanRegisterViewModel">
-    <Grid ColumnDefinitions="*,*,Auto"
+    <Grid ColumnDefinitions="*,*,Auto,*"
           ColumnSpacing="0"
-          RowDefinitions="Auto,*,*,Auto,Auto"
+          RowDefinitions="Auto,Auto,*,*,Auto,Auto"
           RowSpacing="0">
         <Entry x:Name="barcode_register"
                Placeholder="Barcode"
                Grid.Row="0"
                Grid.Column="0"
-               Grid.ColumnSpan="2"
+               Grid.ColumnSpan="3"
                HeightRequest="50"
                FontSize="Large"
                Completed="barcode_register_Completed"/>
         <Label x:Name="scannedCountRegister" 
                Text="{Binding RackScannsRegister.Count}"
-               Grid.Column="2"
-               HeightRequest="30"
-               WidthRequest="150"
+               Grid.Column="3"
+               HeightRequest="30"              
                VerticalOptions="Center"              
                Style="{StaticResource LargeLabel}"
                HorizontalTextAlignment="Center"
                />
+        <Frame
+                Grid.Row="1"
+                Grid.Column="0"
+                Grid.ColumnSpan="3"
+                HeightRequest="50"
+                BackgroundColor="LightSteelBlue"
+            >
+            <Picker x:Name="rackOwner"
+                Title="Gestell Besitzer wählen!"
+                ItemsSource="{Binding RackOwnerList}"
+                ItemDisplayBinding="{Binding OwnerName}"
+                SelectedItem="{Binding RackOwnerSelected}"
+                HeightRequest="50"
+                FontSize="Large"                      
+                />
+
+        </Frame>
+
         <ScrollView HorizontalOptions="CenterAndExpand"
                     VerticalOptions="StartAndExpand"
-                    Grid.Row="1"
+                    Grid.Row="2"
                     Grid.Column="0"
-                    Grid.ColumnSpan="2"
+                    Grid.ColumnSpan="3"
                     Grid.RowSpan="2">
             <CollectionView ItemsSource="{Binding RackScannsRegister}"
                             SelectionMode="None"
@@ -43,11 +59,11 @@
                 </CollectionView.EmptyView>
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="model:RackScan">
-                        <Grid ColumnDefinitions="Auto,*,*"
+                        <Grid ColumnDefinitions="Auto,*"
                               ColumnSpacing="5">
                             <Label HeightRequest="30" Grid.Column="0" Text="{Binding Barcode}" FontSize="Large"></Label>
-                            <!--<Label HeightRequest="20" Grid.Column="1" Text="{Binding Scanned}"></Label>
-                            <Label HeightRequest="20" Grid.Column="2" Text="{Binding ItemID}"></Label>-->
+                            <Label HeightRequest="20" Grid.Column="1" Text="{Binding OwnerName}" Margin="5,0,0,0"></Label>
+                            <!--<Label HeightRequest="20" Grid.Column="2" Text="{Binding ItemID}"></Label>-->
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
@@ -55,13 +71,13 @@
         </ScrollView>
         <Button Text="Scann"
                 Command="{Binding ScanBarcodeRegisterCommand}"
-                Grid.Row="1"
-                Grid.Column="2"
+                Grid.Row="2"
+                Grid.Column="3"
                 Style="{StaticResource ButtonOutline}"/>
         <Button Text="Send"
                 Command="{Binding SendFileRegisterCommand}"
-                Grid.Row="2"
-                Grid.Column="2"
+                Grid.Row="3"
+                Grid.Column="3"
                 Style="{StaticResource ButtonOutline}"/>
         <Label x:Name="filesToSendRegisterDesc" 
                Text="{Binding FilesToSendRegister}"
@@ -73,7 +89,8 @@
                FontSize="Large"
                />
         <Label x:Name="filesToSendRegister" 
-               Text="Dateien noch nicht hochgeladen:   "
+               Text="Dateien:"
+               Margin="0,0,5,0"
                Grid.Column="0"
                Grid.Row="4"
                HeightRequest="30"
@@ -82,22 +99,27 @@
                FontSize="Large"
                />
         <Label x:Name="lightSwitchRegister" 
-               Text="Licht   "
-               Grid.Column="0"
-               Grid.Row="3"
+               Text="Licht"
+               Margin="0,0,5,0"
+               Grid.Column="2"
+               Grid.Row="4"
                HeightRequest="30"
                VerticalOptions="Center"    
-               HorizontalOptions="EndAndExpand"
+               HorizontalOptions="End"
                FontSize="Large"
                />
-        <Switch IsToggled="true"
+        <Switch IsToggled="False"
                 x:Name="FlashlightSwitchRegister"               
-                Grid.Row="3"
-                Grid.Column="1"
+                Grid.Row="4"
+                Grid.Column="3"
                 HorizontalOptions="Start"
                 OnColor="Orange"
                 ThumbColor="Green"
                 Toggled="FlashlightSwitchRegister_Toggled"
                 />
+        <!--<Button Text="Get Test Data"
+                Command="{Binding DownloadFileRegisterCommand}"
+                Grid.Row="5"
+                Style="{StaticResource ButtonOutline}"/>-->
     </Grid>
 </ContentPage>
