@@ -18,7 +18,10 @@
                Grid.ColumnSpan="3"
                HeightRequest="50"
                FontSize="Large"
-               Completed="barcode_register_Completed"/>
+               Loaded="barcode_register_Loaded"
+               Unfocused="barcode_register_Unfocused"
+               Completed="barcode_register_Completed">
+        </Entry>
         <Label x:Name="scannedCountRegister" 
                Text="{Binding RackScannsRegister.Count}"
                Grid.Column="3"
@@ -42,8 +45,36 @@
                 HeightRequest="50"
                 FontSize="Large"                      
                 />
-
+            
         </Frame>
+
+        <Grid ColumnDefinitions="*,*"
+          ColumnSpacing="0"
+          RowDefinitions="*"
+          RowSpacing="0"
+              Grid.Row="1"
+              Grid.Column="3">
+        <Label x:Name="lightSwitchRegister" 
+               Text="Licht"
+               Margin="0,0,5,0"
+               Grid.Column="0"
+               Grid.Row="0"
+               HeightRequest="30"
+               VerticalOptions="Center"    
+               HorizontalOptions="End"
+               FontSize="Large"
+               />
+        <Switch IsToggled="False"
+                x:Name="FlashlightSwitchRegister"               
+                Grid.Row="0"
+                Grid.Column="1"
+                HorizontalOptions="Start"
+                OnColor="Orange"
+                ThumbColor="Green"
+                Toggled="FlashlightSwitchRegister_Toggled"
+                
+                />
+        </Grid>
 
         <ScrollView HorizontalOptions="CenterAndExpand"
                     VerticalOptions="StartAndExpand"
@@ -98,7 +129,7 @@
                HorizontalOptions="EndAndExpand"
                FontSize="Large"
                />
-        <Label x:Name="lightSwitchRegister" 
+        <!--<Label x:Name="lightSwitchRegister" 
                Text="Licht"
                Margin="0,0,5,0"
                Grid.Column="2"
@@ -107,8 +138,8 @@
                VerticalOptions="Center"    
                HorizontalOptions="End"
                FontSize="Large"
-               />
-        <Switch IsToggled="False"
+               />-->
+        <!--<Switch IsToggled="False"
                 x:Name="FlashlightSwitchRegister"               
                 Grid.Row="4"
                 Grid.Column="3"
@@ -116,7 +147,7 @@
                 OnColor="Orange"
                 ThumbColor="Green"
                 Toggled="FlashlightSwitchRegister_Toggled"
-                />
+                />-->
         <!--<Button Text="Get Test Data"
                 Command="{Binding DownloadFileRegisterCommand}"
                 Grid.Row="5"

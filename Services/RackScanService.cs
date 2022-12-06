@@ -20,17 +20,19 @@ namespace PblMauiShipment.Services {
     private const string mRackOutgoingPrefix = "RAO";
     private const string mRackRegisterPrefix = "REG";
 
-    private const string mRackOwnerListFileName = "RackOwnerList.XML";
+    private const string mRackOwnerListFileName = @"RackOwnerList.XML";
 
- 
-    private Uri mBaseAddress = new("http://192.168.5.48:7077"); //PblFit01
-    //private static Uri mBaseAddress = new("http://192.168.168.37:5107"); //NBPUF01 WRTS
-    //private Uri mBaseAddress = new("http://localhost:5107"); //NBPUF01 WRTS
+    //private Uri mBaseAddress = new("http://192.168.5.48:7077"); //PblFit01
+    //private static Uri mBaseAddress = new("http://192.168.168.57:5107"); //NBPUF02 WRTS
+    private static Uri mBaseAddress = new("http://192.168.5.144:5107"); //NBPUF02 Linthe
 
 
     #region Properies
     public List<RackOwner> RackOwnerlistRackScanService { get; set; }
 
+    public Device DeviceInfo {
+      get { return mDeviceInfo; }
+    }
     public string DataDirectory {
       get { return mDataDirectory; }
     }
@@ -215,7 +217,8 @@ namespace PblMauiShipment.Services {
           }
         }
       }
-      catch (Exception) {
+      catch (Exception ex) {
+        string s = ex.Message;
         return result;
       }
 

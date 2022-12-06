@@ -29,14 +29,20 @@ namespace PblMauiShipment.ViewModels {
     [ObservableProperty]
     public int filesToSendIncomming;
 
+    string mDeviceModel = string.Empty;
+
+    public string DeviceModel {
+      get { return mDeviceModel; }
+    }
 
     public RackScanIncomingViewModel(RackScanService rackScanService) {
       Title = Properties.Resources.RackScans;
       jsonFileNameIncomming = string.Format(@"{0}/{1}.json", rackScanService.DataDirectory, rackScanService.RackIncomingPrefix);
+      mDeviceModel = rackScanService.DeviceInfo.DeviceModel;
       UpdateRackScanJsonIncomming();
       FilesToSendIncomming = FilesToSendQtyIncomming();
-
     }
+
 
     #region Command's
     [RelayCommand]

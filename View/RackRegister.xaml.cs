@@ -1,14 +1,13 @@
 namespace PblMauiShipment.View;
 
-public partial class RackRegister : ContentPage
-{
+public partial class RackRegister : ContentPage {
   RackScanRegisterViewModel _viewRegisterModel;
 
-  public RackRegister(RackScanRegisterViewModel rackSannsRegisterViewModel)
-	{
-		InitializeComponent();
+  public RackRegister(RackScanRegisterViewModel rackSannsRegisterViewModel) {
+    InitializeComponent();
     Title = Properties.Resources.RackRegistation;
     BindingContext = _viewRegisterModel = rackSannsRegisterViewModel;
+    barcode_register.Focus();
   }
 
   private void barcode_register_Completed(object sender, EventArgs e) {
@@ -16,6 +15,7 @@ public partial class RackRegister : ContentPage
       _viewRegisterModel.ZxingBarcodeStrRegister = barcode_register.Text;
       barcode_register.Text = string.Empty;
     }
+    barcode_register.Focus();
   }
 
   private async void FlashlightSwitchRegister_Toggled(object sender, ToggledEventArgs e) {
@@ -47,6 +47,20 @@ public partial class RackRegister : ContentPage
       var p = picker.ItemsSource[selectedIndex];
       _viewRegisterModel.RackOwnerSelected = (RackOwner)p;
     }
+    barcode_register.Focus();
+  }
 
+
+  protected override void OnAppearing() {
+    base.OnAppearing();
+    barcode_register.Focus();
+  }
+
+  private void barcode_register_Loaded(object sender, EventArgs e) {
+    barcode_register.Focus();
+  }
+
+  private void barcode_register_Unfocused(object sender, FocusEventArgs e) {
+    barcode_register.Focus();
   }
 }

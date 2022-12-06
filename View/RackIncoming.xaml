@@ -18,7 +18,9 @@
                Grid.Column="0"
                Grid.ColumnSpan="3"
                HeightRequest="50"
-               FontSize="Large"
+               FontSize="Large"             
+               Loaded="barcode_incomming_Loaded"
+               Unfocused="barcode_incomming_Unfocused"
                Completed="barcodeIncomming_Completed"/>
         <Label x:Name="scannedCountIncomming" 
                Text="{Binding RackScannsIncomming.Count}"
@@ -35,6 +37,43 @@
                Grid.ColumnSpan="3"
                HeightRequest="50"
                 />
+        <Frame
+                Grid.Row="1"
+                Grid.Column="0"
+                Grid.ColumnSpan="3"
+                HeightRequest="50"
+                BackgroundColor="LightGray"
+            />
+
+        <Grid x:Name="lightGrid" 
+            ColumnDefinitions="*,*"
+          ColumnSpacing="0"
+          RowDefinitions="*"
+          RowSpacing="0"
+              Grid.Row="1"
+              Grid.Column="3">
+            <Label x:Name="lightSwitchIncomming" 
+               Text="Licht"
+               Margin="0,0,5,0"
+               Grid.Column="0"
+               Grid.Row="0"
+               HeightRequest="30"
+               VerticalOptions="Center"    
+               HorizontalOptions="End"
+               FontSize="Large"
+               />
+            <Switch IsToggled="False"
+                x:Name="FlashlightSwitchIncomming"               
+                Grid.Row="0"
+                Grid.Column="1"
+                HorizontalOptions="Start"
+                OnColor="Orange"
+                ThumbColor="Green"
+                Toggled="FlashlightSwitchIncomming_Toggled"
+                
+                />
+        </Grid>
+
         <ScrollView HorizontalOptions="CenterAndExpand"
                     VerticalOptions="StartAndExpand"
                     Grid.Row="2"
@@ -45,7 +84,7 @@
                             SelectionMode="None"
                             VerticalOptions="StartAndExpand">
                 <CollectionView.EmptyView>
-                        <Label Text="Keine Scann's vorhanden!"></Label>
+                    <Label Text="Keine Scann's vorhanden!"></Label>
                 </CollectionView.EmptyView>
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="model:RackScan">
@@ -59,7 +98,8 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
         </ScrollView>
-        <Button Text="Scann"
+        <Button x:Name="scannButton"
+                Text="Scann"
                 Command="{Binding ScanBarcodeIncommingCommand}"
                 Grid.Row="2"
                 Grid.Column="3"
@@ -108,7 +148,7 @@
                 Grid.Row="4"
                 Grid.Column="0"
                 Style="{StaticResource ButtonOutline}"/>-->
-        <Label x:Name="lightSwitchIncomming" 
+        <!--<Label x:Name="lightSwitchIncomming" 
                Text="Licht"
                Margin="0,0,5,0"
                Grid.Column="2"
@@ -126,7 +166,7 @@
                 OnColor="Orange"
                 ThumbColor="Green"
                 Toggled="FlashlightSwitchIncomming_Toggled"
-                />
+                />-->
 
     </Grid>
 </ContentPage>
