@@ -2,7 +2,7 @@
 using PblMauiShipment.ViewModels;
 
 namespace PblMauiShipment.Services {
-  public class Device {
+  public class DeviceService {
     public string DeviceModel { get; set; }
     public string DeviceManufacturer { get; set; }
     public string DeviceName { get; set; }

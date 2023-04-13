@@ -48,7 +48,8 @@
             
         </Frame>
 
-        <Grid ColumnDefinitions="*,*"
+        <Grid  x:Name="lightGrid" 
+               ColumnDefinitions="*,*"
           ColumnSpacing="0"
           RowDefinitions="*"
           RowSpacing="0"
@@ -100,14 +101,15 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
         </ScrollView>
-        <Button Text="Scann"
+        <Button x:Name="scannButton"
+                Text="Scann"
                 Command="{Binding ScanBarcodeRegisterCommand}"
-                Grid.Row="2"
+                Grid.Row="3"
                 Grid.Column="3"
                 Style="{StaticResource ButtonOutline}"/>
         <Button Text="Send"
                 Command="{Binding SendFileRegisterCommand}"
-                Grid.Row="3"
+                Grid.Row="2"
                 Grid.Column="3"
                 Style="{StaticResource ButtonOutline}"/>
         <Label x:Name="filesToSendRegisterDesc" 

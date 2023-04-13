@@ -36,12 +36,19 @@ namespace PblMauiShipment.ViewModels {
     [ObservableProperty]
     public RackOwner rackOwnerSelected;
 
+    string mDeviceModel = string.Empty;
+
+    public string DeviceModel {
+      get { return mDeviceModel; }
+    }
+
     public RackScanRegisterViewModel(RackScanService rackScanService) {
       Title = Properties.Resources.RackScans;
       jsonFileNameRegister = string.Format(@"{0}/{1}.json", rackScanServiceRegister.DataDirectory, rackScanServiceRegister.RackRegisterPrefix);
       jsonFileNameOwnerPickerSelected = string.Format(@"{0}/{1}.json", rackScanServiceRegister.DataDirectory, "OwnerSelected.json");
       UpdateRackScanJsonRegister();
       //UpdateOwnerPickerSelectedJsonRegister();
+      mDeviceModel = rackScanService.DeviceInfo.DeviceModel;
       filesToSendRegister = FilesToSendQtyRegister();
       RackOwnerList = rackScanServiceRegister.RackOwnerlistRackScanService;
     }

@@ -101,12 +101,12 @@
         <Button x:Name="scannButton"
                 Text="Scann"
                 Command="{Binding ScanBarcodeIncommingCommand}"
-                Grid.Row="2"
+                Grid.Row="3"
                 Grid.Column="3"
                 Style="{StaticResource ButtonOutline}"/>
         <Button Text="Send"
                 Command="{Binding SendFileIncommingCommand}"
-                Grid.Row="3"
+                Grid.Row="2"
                 Grid.Column="3"
                 Style="{StaticResource ButtonOutline}"/>
         <Label x:Name="filesToSendIncomming" 

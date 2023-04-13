@@ -7,6 +7,10 @@ public partial class RackRegister : ContentPage {
     InitializeComponent();
     Title = Properties.Resources.RackRegistation;
     BindingContext = _viewRegisterModel = rackSannsRegisterViewModel;
+    if (_viewRegisterModel.DeviceModel == "CT60") {
+      lightGrid.IsVisible = false;
+      scannButton.IsVisible = false;
+    }
     barcode_register.Focus();
   }
 

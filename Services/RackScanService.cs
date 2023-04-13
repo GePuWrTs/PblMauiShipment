@@ -2,8 +2,9 @@
 using System.Net.Http.Headers;
 using System.Net.Http;
 using System.Text;
-using System.Xml;
 using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Xml;
 using PblMauiShipment.Models;
 using System.IO;
 
@@ -14,7 +15,7 @@ namespace PblMauiShipment.Services {
   public class RackScanService {
     private string mDataDirectory;
     private string mRackFileDirectory;
-    private Device mDeviceInfo = new();
+    private DeviceService mDeviceInfo = new();
     CultureInfo mProvider = new CultureInfo("de-DE");
     private const string mRackIncomingPrefix = "RAI";
     private const string mRackOutgoingPrefix = "RAO";
@@ -22,15 +23,19 @@ namespace PblMauiShipment.Services {
 
     private const string mRackOwnerListFileName = @"RackOwnerList.XML";
 
-    //private Uri mBaseAddress = new("http://192.168.5.48:7077"); //PblFit01
-    //private static Uri mBaseAddress = new("http://192.168.168.57:5107"); //NBPUF02 WRTS
-    private static Uri mBaseAddress = new("http://192.168.5.144:5107"); //NBPUF02 Linthe
+    private SettingsService mSettingsService = new();
 
+    private Uri mBaseAddress;
+
+
+    //mBaseAddress = new("http://192.168.5.48:7077"); //PblFit01
+    //mBaseAddress = new("http://192.168.168.57:5107"); //NBPUF02 WRTS
+    //mBaseAddress = new("http://192.168.5.144:5107"); //NBPUF02 Linthe
 
     #region Properies
     public List<RackOwner> RackOwnerlistRackScanService { get; set; }
 
-    public Device DeviceInfo {
+    public DeviceService DeviceInfo {
       get { return mDeviceInfo; }
     }
     public string DataDirectory {
@@ -57,11 +62,17 @@ namespace PblMauiShipment.Services {
       Directory.CreateDirectory(mDataDirectory);
       mRackFileDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "rackFiles");
       Directory.CreateDirectory(mRackFileDirectory);
+      SetUriFromSetting();
       mDeviceInfo.ReadDeviceInfo();
       var result = Task.Run<bool>(async () => await GetOwnerList()).Wait(new TimeSpan(0,0,10));
       if (result) {
         result = false;
       }
+    }
+
+    public bool SetUriFromSetting() {
+      mBaseAddress = new Uri(mSettingsService.ShipSettings.RackServiceURI);
+      return mBaseAddress.AbsoluteUri == mSettingsService.ShipSettings.RackServiceURI;
     }
 
     public async Task<bool> GetOwnerList() {

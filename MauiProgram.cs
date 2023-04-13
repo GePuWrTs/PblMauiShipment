@@ -27,6 +27,7 @@ public static class MauiProgram {
     builder.Services.AddSingleton<RackScanIncomingViewModel>();
     builder.Services.AddSingleton<RackScanRegisterViewModel>();
     builder.Services.AddTransient<MainPage>();
+    builder.Services.AddTransient<SettingPage>();
 
     builder.Services.AddTransient<RackIncoming>();
     builder.Services.AddTransient<RackOutgoing>();

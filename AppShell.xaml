@@ -33,4 +33,13 @@
         Route="MainPage" />
     </FlyoutItem>
 
+    <FlyoutItem Title="Setting">
+        <ShellContent
+        Title="Setting"
+        ContentTemplate="{DataTemplate pages:SettingPage}"
+        Route="SettingPage" />
+    </FlyoutItem>
+
+
+
 </Shell>

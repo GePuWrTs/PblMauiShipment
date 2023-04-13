@@ -82,6 +82,9 @@
 	  <MauiXaml Update="View\RackRegister.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="View\SettingPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="View\ZXingBarcodeReader.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
