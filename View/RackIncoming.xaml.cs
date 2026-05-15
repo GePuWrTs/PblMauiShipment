@@ -14,7 +14,7 @@ public partial class RackIncoming : ContentPage {
       lightGrid.IsVisible= false;
       scannButton.IsVisible= false;
     }
-    barcode_incomming.Focus();
+    //barcode_incomming.Focus();
   }
 
 
@@ -23,12 +23,19 @@ public partial class RackIncoming : ContentPage {
       _viewIncomingModel.ZxingBarcodeStrIncomming = barcode_incomming.Text;
       barcode_incomming.Text = string.Empty;
     }
-    barcode_incomming.Focus();
-  }
+        //barcode_incomming.Focus();
+        barcode_incomming.Unfocus();
+    }
 
+    private void DeleteRackScannIncomming_Clicked(object sender, EventArgs e)
+    {
+        if (sender is Button { BindingContext: RackScan rackScan })
+        {
+            _viewIncomingModel.DeleteRackScannIncommingCommand.Execute(rackScan);
+        }
+    }
 
-
-  private async void FlashlightSwitchIncomming_Toggled(object sender, ToggledEventArgs e) {
+    private async void FlashlightSwitchIncomming_Toggled(object sender, ToggledEventArgs e) {
     try {
       if (FlashlightSwitchIncomming.IsToggled)
         await Flashlight.Default.TurnOnAsync();
@@ -46,17 +53,17 @@ public partial class RackIncoming : ContentPage {
     }
   }
 
-  private void barcode_incomming_Loaded(object sender, EventArgs e) {
-    barcode_incomming.Focus();
-  }
+  //private void barcode_incomming_Loaded(object sender, EventArgs e) {
+  //  barcode_incomming.Focus();
+  //}
 
-  protected override void OnAppearing() {
-    base.OnAppearing();
-    barcode_incomming.Focus();
-  }
+  //protected override void OnAppearing() {
+  //  base.OnAppearing();
+  //  barcode_incomming.Focus();
+  //}
 
-  private void barcode_incomming_Unfocused(object sender, FocusEventArgs e) {
-    barcode_incomming.Focus();
+  //private void barcode_incomming_Unfocused(object sender, FocusEventArgs e) {
+  //  barcode_incomming.Focus();
 
-  }
+  //}
 }

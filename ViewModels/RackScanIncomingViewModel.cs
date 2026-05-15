@@ -116,13 +116,30 @@ namespace PblMauiShipment.ViewModels {
 
 
     [RelayCommand]
-    async Task<bool> DeleteRackScannÎncommingAsync(int itemID) {
-      var oldRackScan = RackScannsIncomming.Where(r => r.ItemID == itemID).FirstOrDefault();
-      RackScannsIncomming.Remove(oldRackScan);
-      return await Task.FromResult(true);
-    }
+        //async Task<bool> DeleteRackScannÎncommingAsync(int itemID) {
+        //    var oldRackScan = RackScannsIncomming.Where(r => r.ItemID == itemID).FirstOrDefault();
+        //    RackScannsIncomming.Remove(oldRackScan);
+        //    return await Task.FromResult(true);
+        //}
+        void DeleteRackScannIncomming(RackScan rackScan)
+        {
+            if (rackScan == null)
+            {
+                return;
+            }
 
-    [RelayCommand]
+            if (RackScannsIncomming.Remove(rackScan))
+            {
+                if (zxingBarcodeStrIncommingOld == rackScan.Barcode)
+                {
+                    zxingBarcodeStrIncommingOld = string.Empty;
+                }
+
+                SaveRackScanJsonIncomming();
+            }
+        }
+
+        [RelayCommand]
     async Task GetMockRackScannsIncommingAsync() {
       try {
         IsBusy = true;
@@ -190,20 +207,43 @@ namespace PblMauiShipment.ViewModels {
             RackScannsIncomming = JsonSerializer.Deserialize<ObservableCollection<RackScan>>(json);
           }
         } else {
-          string jsonString = JsonSerializer.Serialize(RackScannsIncomming, new JsonSerializerOptions() { WriteIndented = true });
-          using (StreamWriter outputFile = new StreamWriter(FiJson.FullName)) {
-            outputFile.WriteLine(jsonString);
-          }
-        }
+                    //string jsonString = JsonSerializer.Serialize(RackScannsIncomming, new JsonSerializerOptions() { WriteIndented = true });
+                    //using (StreamWriter outputFile = new StreamWriter(FiJson.FullName)) {
+                    //  outputFile.WriteLine(jsonString);
+                    //}
+                    SaveRackScanJsonIncomming();
+                }
       } else {
         if (RackScannsIncomming.Count > 0) {
-          string jsonString = JsonSerializer.Serialize(RackScannsIncomming, new JsonSerializerOptions() { WriteIndented = true });
-          using (StreamWriter outputFile = new StreamWriter(FiJson.FullName)) {
-            outputFile.WriteLine(jsonString);
-          }
-        }
+                    //string jsonString = JsonSerializer.Serialize(RackScannsIncomming, new JsonSerializerOptions() { WriteIndented = true });
+                    //using (StreamWriter outputFile = new StreamWriter(FiJson.FullName)) {
+                    //  outputFile.WriteLine(jsonString);
+                    //}
+                    SaveRackScanJsonIncomming();
+                }
       }
     }
 
-  }
+
+        void SaveRackScanJsonIncomming()
+        {
+            FileInfo fiJson = new FileInfo(jsonFileNameIncomming);
+            if (RackScannsIncomming.Count == 0)
+            {
+                if (fiJson.Exists)
+                {
+                    fiJson.Delete();
+                }
+
+                return;
+            }
+
+            string jsonString = JsonSerializer.Serialize(RackScannsIncomming, new JsonSerializerOptions() { WriteIndented = true });
+            using (StreamWriter outputFile = new StreamWriter(fiJson.FullName))
+            {
+                outputFile.WriteLine(jsonString);
+            }
+        }
+
+    }
 }
