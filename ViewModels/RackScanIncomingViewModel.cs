@@ -50,7 +50,11 @@ namespace PblMauiShipment.ViewModels {
       int FileCount = 0;
       int fileQty = FilesToSendQtyIncomming();
       try {
-        IsBusy = true;
+                if (!await ConfirmSendFilesAsync(fileQty, RackScannsIncomming.Count))
+                {
+                    return FileCount;
+                }
+                IsBusy = true;
         if (await rackScanServiceIncomming.SaveRackScanListToXml(RackScannsIncomming, ScanType.incoming) || (fileQty > 0)) {
           await ClearRackScannsIncommingAsync();
           FileInfo fi = new FileInfo(jsonFileNameIncomming);
@@ -74,7 +78,7 @@ namespace PblMauiShipment.ViewModels {
         throw;
       }
       finally {
-        IsBusy = true;
+        IsBusy = false;
       }
       FilesToSendIncomming = FilesToSendQtyIncomming(); 
 

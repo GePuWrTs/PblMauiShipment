@@ -27,7 +27,21 @@ namespace PblMauiShipment.ViewModels {
       await PlaySound("Resources/Audio/error.mp3");
     }
 
-    public async Task PlaySound(string fileName) {
+        protected async Task<bool> ConfirmSendFilesAsync(int pendingFileCount, int scanCount)
+        {
+            if (pendingFileCount == 0 && scanCount == 0)
+            {
+                return true;
+            }
+
+            string message = pendingFileCount > 0
+              ? $"Es sind {pendingFileCount} Datei(en) zum Senden vorgemerkt. Jetzt senden?"
+              : $"Aus {scanCount} Scan(s) wird eine Datei erstellt und gesendet. Jetzt senden?";
+
+            return await Shell.Current.DisplayAlert("Dateien senden", message, "Senden", "Abbrechen");
+        }
+
+        public async Task PlaySound(string fileName) {
       try {
         await using Stream audioStream = await FileSystem.OpenAppPackageFileAsync(fileName);
         using IAudioPlayer audioPlayer = AudioManager.Current.CreatePlayer(audioStream);

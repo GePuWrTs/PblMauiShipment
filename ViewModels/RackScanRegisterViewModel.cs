@@ -74,6 +74,11 @@ namespace PblMauiShipment.ViewModels
             int fileQty = FilesToSendQtyRegister();
             try
             {
+                if (!await ConfirmSendFilesAsync(fileQty, RackScannsRegister.Count))
+                {
+                    return FileCount;
+                }
+
                 IsBusy = true;
                 if (await rackScanServiceRegister.SaveRackScanListToXml(RackScannsRegister, ScanType.register) || (fileQty > 0))
                 {
@@ -106,7 +111,7 @@ namespace PblMauiShipment.ViewModels
             }
             finally
             {
-                IsBusy = true;
+                IsBusy = false;
             }
             FilesToSendRegister = FilesToSendQtyRegister();
 
