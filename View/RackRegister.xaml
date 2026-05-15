@@ -134,6 +134,11 @@
                HorizontalOptions="End"
                FontSize="Large"
                />
+        <Button Text="Löschen"
+                Command="{Binding DeleteFilesToSendRegisterCommand}"
+                Grid.Row="4"
+                Grid.Column="3"
+                Style="{StaticResource ButtonOutline}"/>        
         <!--<Label x:Name="lightSwitchRegister" 
                Text="Licht"
                Margin="0,0,5,0"

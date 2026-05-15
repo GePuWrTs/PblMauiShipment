@@ -236,7 +236,19 @@ namespace PblMauiShipment.Services {
       return result;
     }
 
-    public async Task<int> UploadFiles() {
+        public int DeletePendingFiles()
+        {
+            DirectoryInfo di = new(mRackFileDirectory);
+            int fileCount = 0;
+            foreach (var fi in di.GetFiles())
+            {
+                fi.Delete();
+                fileCount++;
+            }
+            return fileCount;
+        }
+
+        public async Task<int> UploadFiles() {
       DirectoryInfo di = new(mRackFileDirectory);
       int fileCount = 0;
       foreach (var fi in di.GetFiles()) {

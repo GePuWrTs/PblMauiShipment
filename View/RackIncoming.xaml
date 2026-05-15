@@ -133,7 +133,12 @@
                HorizontalOptions="End"
                FontSize="Large"
                />
-
+        <Button Text="Löschen"
+                Command="{Binding DeleteFilesToSendIncommingCommand}"
+                Grid.Row="4"
+                Grid.Column="3"
+                Style="{StaticResource ButtonOutline}"/>
+        
         <!--<Button Text="Get Test Data"
                 Command="{Binding GetMockRackScannsCommand}"
                 Grid.Row="3"

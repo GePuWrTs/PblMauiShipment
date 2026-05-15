@@ -85,7 +85,32 @@ namespace PblMauiShipment.ViewModels {
       return await Task.FromResult(FileCount);
     }
 
-    [RelayCommand]
+
+        [RelayCommand]
+        async Task<int> DeleteFilesToSendIncomming()
+        {
+            int fileQty = FilesToSendQtyIncomming();
+            if (!await ConfirmDeleteFilesAsync(fileQty))
+            {
+                return 0;
+            }
+
+            try
+            {
+                IsBusy = true;
+                int deletedFileCount = rackScanServiceIncomming.DeletePendingFiles();
+                FilesToSendIncomming = FilesToSendQtyIncomming();
+                await Shell.Current.DisplayAlert("Dateien löschen", $"{deletedFileCount} Datei(en) gelöscht.", "OK");
+                return deletedFileCount;
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+
+        [RelayCommand]
     async Task ScanBarcodeIncommingAsync() {
       await Shell.Current.GoToAsync($"{nameof(ZXingBarcodeReader)}?scantype={ScanType.incoming.ToString()}", true);
     }

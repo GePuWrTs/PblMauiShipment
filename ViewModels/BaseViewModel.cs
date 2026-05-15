@@ -41,6 +41,18 @@ namespace PblMauiShipment.ViewModels {
             return await Shell.Current.DisplayAlert("Dateien senden", message, "Senden", "Abbrechen");
         }
 
+        protected async Task<bool> ConfirmDeleteFilesAsync(int pendingFileCount)
+        {
+            if (pendingFileCount == 0)
+            {
+                await Shell.Current.DisplayAlert("Dateien löschen", "Keine ungesendeten Dateien vorhanden.", "OK");
+                return false;
+            }
+
+            string message = $"Es sind {pendingFileCount} ungesendete Datei(en) vorhanden. Jetzt löschen?";
+            return await Shell.Current.DisplayAlert("Dateien löschen", message, "Löschen", "Abbrechen");
+        }
+
         public async Task PlaySound(string fileName) {
       try {
         await using Stream audioStream = await FileSystem.OpenAppPackageFileAsync(fileName);
