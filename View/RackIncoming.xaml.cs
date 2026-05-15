@@ -14,7 +14,6 @@ public partial class RackIncoming : ContentPage {
       lightGrid.IsVisible= false;
       scannButton.IsVisible= false;
     }
-    //barcode_incomming.Focus();
   }
 
 
@@ -23,7 +22,6 @@ public partial class RackIncoming : ContentPage {
       _viewIncomingModel.ZxingBarcodeStrIncomming = barcode_incomming.Text;
       barcode_incomming.Text = string.Empty;
     }
-        //barcode_incomming.Focus();
         barcode_incomming.Unfocus();
     }
 
@@ -52,18 +50,4 @@ public partial class RackIncoming : ContentPage {
       // Unable to turn on/off flashlight
     }
   }
-
-  //private void barcode_incomming_Loaded(object sender, EventArgs e) {
-  //  barcode_incomming.Focus();
-  //}
-
-  //protected override void OnAppearing() {
-  //  base.OnAppearing();
-  //  barcode_incomming.Focus();
-  //}
-
-  //private void barcode_incomming_Unfocused(object sender, FocusEventArgs e) {
-  //  barcode_incomming.Focus();
-
-  //}
 }

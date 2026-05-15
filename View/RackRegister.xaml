@@ -18,8 +18,6 @@
                Grid.ColumnSpan="3"
                HeightRequest="50"
                FontSize="Large"
-               Loaded="barcode_register_Loaded"
-               Unfocused="barcode_register_Unfocused"
                Completed="barcode_register_Completed">
         </Entry>
         <Label x:Name="scannedCountRegister" 
@@ -91,10 +89,16 @@
                 </CollectionView.EmptyView>
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="model:RackScan">
-                        <Grid ColumnDefinitions="Auto,*"
+                        <Grid ColumnDefinitions="Auto,*,Auto"
                               ColumnSpacing="5">
                             <Label HeightRequest="30" Grid.Column="0" Text="{Binding Barcode}" FontSize="Large"></Label>
                             <Label HeightRequest="20" Grid.Column="1" Text="{Binding OwnerName}" Margin="5,0,0,0"></Label>
+                            <Button Text="Löschen"
+                                    Clicked="DeleteRackScannRegister_Clicked"
+                                    Grid.Column="2"
+                                    Padding="10,0"
+                                    HeightRequest="30"
+                                    FontSize="Small" />
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

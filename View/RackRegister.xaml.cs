@@ -11,7 +11,6 @@ public partial class RackRegister : ContentPage {
       lightGrid.IsVisible = false;
       scannButton.IsVisible = false;
     }
-    barcode_register.Focus();
   }
 
   private void barcode_register_Completed(object sender, EventArgs e) {
@@ -19,10 +18,18 @@ public partial class RackRegister : ContentPage {
       _viewRegisterModel.ZxingBarcodeStrRegister = barcode_register.Text;
       barcode_register.Text = string.Empty;
     }
-    barcode_register.Focus();
+    barcode_register.Unfocus();
   }
 
-  private async void FlashlightSwitchRegister_Toggled(object sender, ToggledEventArgs e) {
+    private void DeleteRackScannRegister_Clicked(object sender, EventArgs e)
+    {
+        if (sender is Button { BindingContext: RackScan rackScan })
+        {
+            _viewRegisterModel.DeleteRackScannRegisterCommand.Execute(rackScan);
+        }
+    }
+
+    private async void FlashlightSwitchRegister_Toggled(object sender, ToggledEventArgs e) {
     try {
       if (FlashlightSwitchRegister.IsToggled)
         await Flashlight.Default.TurnOnAsync();
@@ -51,20 +58,6 @@ public partial class RackRegister : ContentPage {
       var p = picker.ItemsSource[selectedIndex];
       _viewRegisterModel.RackOwnerSelected = (RackOwner)p;
     }
-    barcode_register.Focus();
   }
 
-
-  protected override void OnAppearing() {
-    base.OnAppearing();
-    barcode_register.Focus();
-  }
-
-  private void barcode_register_Loaded(object sender, EventArgs e) {
-    barcode_register.Focus();
-  }
-
-  private void barcode_register_Unfocused(object sender, FocusEventArgs e) {
-    barcode_register.Focus();
-  }
 }
