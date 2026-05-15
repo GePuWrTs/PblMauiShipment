@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Plugin.Maui.Audio;
 
 namespace PblMauiShipment.ViewModels {
   public partial class BaseViewModel : ObservableObject {
@@ -19,28 +20,22 @@ namespace PblMauiShipment.ViewModels {
 
     [RelayCommand]
     public async Task PlayBeepAsync() {
-      await PlaySound(@"Resources\Audio\beep.mp3");
+      await PlaySound("Resources/Audio/beep.mp3");
     }
     [RelayCommand]
     public async Task PlayErrorAsync() {
-      await PlaySound(@"Resources\Audio\error.mp3");
+      await PlaySound("Resources/Audio/error.mp3");
     }
 
     public async Task PlaySound(string fileName) {
       try {
-        using (Stream audioStream = await FileSystem.OpenAppPackageFileAsync($"{fileName}")) {
-          if (audioStream != null) {
-            using (var audio = Plugin.SimpleAudioPlayer.CrossSimpleAudioPlayer.CreateSimpleAudioPlayer()) {
-              if (audio != null) {
-                audio.Load(audioStream);
-                audio.Play();
-                while (audio.IsPlaying) {
-                  Task.Delay(10).Wait();
-                }
-              }
-            }
-            audioStream.Close();
-          }
+        await using Stream audioStream = await FileSystem.OpenAppPackageFileAsync(fileName);
+        using IAudioPlayer audioPlayer = AudioManager.Current.CreatePlayer(audioStream);
+
+        audioPlayer.Play();
+
+        while (audioPlayer.IsPlaying) {
+          await Task.Delay(10);
         }
       }
       catch (Exception ex) {

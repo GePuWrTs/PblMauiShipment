@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using System.Reflection;
-using ZXing.Net.Maui;
+﻿using ZXing.Net.Maui.Controls;
 
 namespace PblMauiShipment;
 
@@ -13,14 +11,6 @@ public static class MauiProgram {
       .ConfigureFonts(fonts => {
         fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
         fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-      })
-      .ConfigureMauiHandlers(h => {
-        h.AddHandler(typeof(ZXing.Net.Maui.Controls.CameraBarcodeReaderView),
-          typeof(CameraBarcodeReaderViewHandler));
-        h.AddHandler(typeof(ZXing.Net.Maui.Controls.CameraView),
-          typeof(CameraViewHandler));
-        h.AddHandler(typeof(ZXing.Net.Maui.Controls.BarcodeGeneratorView),
-          typeof(BarcodeGeneratorViewHandler));
       });
 
     builder.Services.AddSingleton<RackScanService>();
