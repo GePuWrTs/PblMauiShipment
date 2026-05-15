@@ -74,15 +74,15 @@
                 />
         </Grid>
 
-        <ScrollView HorizontalOptions="CenterAndExpand"
-                    VerticalOptions="StartAndExpand"
+        <ScrollView HorizontalOptions="Center"
+                    VerticalOptions="Start"
                     Grid.Row="2"
                     Grid.Column="0"
                     Grid.ColumnSpan="3"
                     Grid.RowSpan="2">
             <CollectionView ItemsSource="{Binding RackScannsIncomming}"
                             SelectionMode="None"
-                            VerticalOptions="StartAndExpand">
+                            VerticalOptions="Start">
                 <CollectionView.EmptyView>
                     <Label Text="Keine Scann's vorhanden!"></Label>
                 </CollectionView.EmptyView>
@@ -125,7 +125,7 @@
                Grid.Row="4"
                HeightRequest="30"
                VerticalOptions="Center"    
-               HorizontalOptions="EndAndExpand"
+               HorizontalOptions="End"
                FontSize="Large"
                />
 

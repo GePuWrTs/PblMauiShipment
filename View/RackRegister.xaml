@@ -38,14 +38,14 @@
                 BackgroundColor="LightSteelBlue"
             >
             <Picker x:Name="rackOwner"
-                Title="Gestell Besitzer wÃ¤hlen!"
+                Title="Gestell Besitzer wählen!"
                 ItemsSource="{Binding RackOwnerList}"
                 ItemDisplayBinding="{Binding OwnerName}"
                 SelectedItem="{Binding RackOwnerSelected}"
                 HeightRequest="50"
                 FontSize="Large"                      
                 />
-            
+
         </Frame>
 
         <Grid  x:Name="lightGrid" 
@@ -77,15 +77,15 @@
                 />
         </Grid>
 
-        <ScrollView HorizontalOptions="CenterAndExpand"
-                    VerticalOptions="StartAndExpand"
+        <ScrollView HorizontalOptions="Center"
+                    VerticalOptions="Start"
                     Grid.Row="2"
                     Grid.Column="0"
                     Grid.ColumnSpan="3"
                     Grid.RowSpan="2">
             <CollectionView ItemsSource="{Binding RackScannsRegister}"
                             SelectionMode="None"
-                            VerticalOptions="StartAndExpand">
+                            VerticalOptions="Start">
                 <CollectionView.EmptyView>
                     <Label Text="Keine Scann's vorhanden!"></Label>
                 </CollectionView.EmptyView>
@@ -95,7 +95,6 @@
                               ColumnSpacing="5">
                             <Label HeightRequest="30" Grid.Column="0" Text="{Binding Barcode}" FontSize="Large"></Label>
                             <Label HeightRequest="20" Grid.Column="1" Text="{Binding OwnerName}" Margin="5,0,0,0"></Label>
-                            <!--<Label HeightRequest="20" Grid.Column="2" Text="{Binding ItemID}"></Label>-->
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
@@ -128,7 +127,7 @@
                Grid.Row="4"
                HeightRequest="30"
                VerticalOptions="Center"    
-               HorizontalOptions="EndAndExpand"
+               HorizontalOptions="End"
                FontSize="Large"
                />
         <!--<Label x:Name="lightSwitchRegister" 
