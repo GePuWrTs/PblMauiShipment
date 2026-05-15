@@ -140,7 +140,7 @@ public partial class RackRegister : ContentPage
 
     }
 
-    private void rackOwner_SelectedIndexChanged(object sender, EventArgs e)
+    private async void rackOwner_SelectedIndexChanged(object sender, EventArgs e)
     {
         //>SelectedIndexChanged="rackOwner_SelectedIndexChanged"
 
@@ -151,6 +151,7 @@ public partial class RackRegister : ContentPage
         {
             var p = picker.ItemsSource[selectedIndex];
             _viewRegisterModel.RackOwnerSelected = (RackOwner)p;
+            await FocusBarcodeInputForScannerAsync();
         }
     }
 

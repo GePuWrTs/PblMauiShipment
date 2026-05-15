@@ -71,38 +71,42 @@
                 
                 />
         </Grid>
-
-        <ScrollView HorizontalOptions="Center"
-                    VerticalOptions="Start"
-                    Grid.Row="2"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="3"
-                    Grid.RowSpan="2">
-            <CollectionView ItemsSource="{Binding RackScannsIncomming}"
-                            SelectionMode="None"
-                            VerticalOptions="Start">
-                <CollectionView.EmptyView>
-                    <Label Text="Keine Scann's vorhanden!"></Label>
-                </CollectionView.EmptyView>
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="model:RackScan">
-                        <!--<Grid ColumnDefinitions="Auto,*,*"-->
-                        <Grid ColumnDefinitions="*,Auto"
-                              ColumnSpacing="5">
-                            <Label HeightRequest="30" Grid.Column="0" Text="{Binding Barcode}" FontSize="Large"></Label>
-                            <Button Text="Löschen"
-                                    Clicked="DeleteRackScannIncomming_Clicked"
-                                    Grid.Column="1"
-                                    Padding="10,0"
-                                    HeightRequest="30"
-                                    FontSize="Small" />
-                            <!--<Label HeightRequest="20" Grid.Column="1" Text="{Binding Scanned}"></Label>
-                            <Label HeightRequest="20" Grid.Column="2" Text="{Binding ItemID}"></Label>-->
-                        </Grid>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </ScrollView>
+        <CollectionView ItemsSource="{Binding RackScannsIncomming}"
+                        SelectionMode="None"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Start"
+                        HeightRequest="360"
+                        VerticalScrollBarVisibility="Always"
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="3"
+                        Grid.RowSpan="2">
+            <CollectionView.EmptyView>
+                <Label Text="Keine Scann's vorhanden!"></Label>
+            </CollectionView.EmptyView>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="model:RackScan">
+                    <!--<Grid ColumnDefinitions="Auto,*,*"-->
+                    <Grid ColumnDefinitions="*,Auto"
+                          ColumnSpacing="5">
+                        <Label HeightRequest="30" Grid.Column="0" Text="{Binding Barcode}" FontSize="Large"></Label>
+                        <Button Text="×"
+                                Clicked="DeleteRackScannIncomming_Clicked"
+                                Grid.Column="1"
+                                Padding="0"
+                                WidthRequest="30"
+                                HeightRequest="30"
+                                MinimumWidthRequest="30"
+                                MinimumHeightRequest="30"
+                                CornerRadius="4"
+                                FontSize="Small"
+                                SemanticProperties.Description="Löschen" />
+                        <!--<Label HeightRequest="20" Grid.Column="1" Text="{Binding Scanned}"></Label>
+                        <Label HeightRequest="20" Grid.Column="2" Text="{Binding ItemID}"></Label>-->
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
         <Button x:Name="scannButton"
                 Text="Scann"
                 Command="{Binding ScanBarcodeIncommingCommand}"
