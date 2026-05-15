@@ -1,5 +1,6 @@
 #if ANDROID
 using Android.Content;
+using Android.Views;
 using Android.Views.InputMethods;
 #endif
 
@@ -8,7 +9,9 @@ namespace PblMauiShipment.View;
 public partial class RackRegister : ContentPage
 {
     RackScanRegisterViewModel _viewRegisterModel;
-
+#if ANDROID
+    bool _isBarcodeManualKeyboardHandlerAttached;
+#endif
     public RackRegister(RackScanRegisterViewModel rackSannsRegisterViewModel)
     {
         InitializeComponent();
@@ -44,6 +47,7 @@ public partial class RackRegister : ContentPage
 
 #if ANDROID
         var editText = barcode_register.Handler?.PlatformView as Android.Widget.EditText;
+        EnableManualKeyboardOnTouchForCt60(editText);
         if (suppressSoftKeyboard && editText != null)
         {
             editText.ShowSoftInputOnFocus = false;
@@ -77,6 +81,32 @@ public partial class RackRegister : ContentPage
     await barcode_register.HideSoftInputAsync(CancellationToken.None);
 #endif
     }
+
+
+#if ANDROID
+    private void EnableManualKeyboardOnTouchForCt60(Android.Widget.EditText editText)
+    {
+        if (_viewRegisterModel.DeviceModel != "CT60" || editText == null || _isBarcodeManualKeyboardHandlerAttached)
+        {
+            return;
+        }
+
+        _isBarcodeManualKeyboardHandlerAttached = true;
+        editText.Touch += (_, args) =>
+        {
+            if (args.Event?.Action != MotionEventActions.Up)
+            {
+                return;
+            }
+
+            editText.ShowSoftInputOnFocus = true;
+            editText.RequestFocus();
+
+            var inputMethodManager = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity?.GetSystemService(Context.InputMethodService) as InputMethodManager;
+            inputMethodManager?.ShowSoftInput(editText, ShowFlags.Implicit);
+        };
+    }
+#endif
 
     private void DeleteRackScannRegister_Clicked(object sender, EventArgs e)
     {
